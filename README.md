@@ -57,8 +57,8 @@ subgraph "Execution Cycle"
 end
 
 subgraph "End"
-    END(("Go to
-    Start")):::greenClass
+    END(("Go back
+    to Start")):::greenClass
 
     LOAD_MQ__B --> END
     LOAD_MQ_MX__B --> END
