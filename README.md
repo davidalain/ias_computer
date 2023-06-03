@@ -8,9 +8,6 @@
 ---
 title: Flowchart of IAS Operation
 ---
----
-title: Flowchart of IAS Operation
----
 flowchart TD
 
 subgraph "Fetch Cycle"
