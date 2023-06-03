@@ -57,20 +57,22 @@ subgraph "Execution Cycle"
         ADD_MX2__B --> ADD_MX2__C
     end
 
+    DECODE --> |"SUB M(X)
+    (opcode: 00000110)"|SUB_MX__A
     subgraph "SUB M(X)"
         SUB_MX__A("MBR ← M(MAR)")
         SUB_MX__B("AC ← AC - MBR")
-        DECODE --> |"SUB M(X)
-        (opcode: 00000110)"|SUB_MX__A
+        
         SUB_MX__A ---> SUB_MX__B
     end
 
+    DECODE --> |"SUB |M(X)|
+    (opcode: 00001000)"|SUB_MX__A1
     subgraph "SUB |M(X)|"
         SUB_MX__A1("MBR ← M(MAR)")
         SUB_MX__B1("MBR[0] ← 0")
         SUB_MX__C1("AC ← AC - MBR")
-        DECODE --> |"SUB |M(X)|
-        (opcode: 00001000)"|SUB_MX__A1
+        
         SUB_MX__A1 --> SUB_MX__B1
         SUB_MX__B1 --> SUB_MX__C1     
     end
