@@ -54,6 +54,14 @@ subgraph "Execution Cycle"
         (opcode: 00001001)"|LOAD_MQ_MX__A
         LOAD_MQ_MX__A --> LOAD_MQ_MX__B
     end
+
+    subgraph "ADD M(X)"
+        ADD_MX__A("MBR ← M(MAR)")
+        ADD_MX__B("MBR ← M(MAR)")
+
+        DECODE --> |"ADD M(X)
+        (opcode: 00000101)"| ADD_MX__A --> ADD_MX__B
+    end
 end
 
 subgraph "End"
@@ -62,6 +70,7 @@ subgraph "End"
 
     LOAD_MQ__B --> END
     LOAD_MQ_MX__B --> END
+    ADD_MX__B --> END
 end
 
 classDef greenClass fill:#008000
