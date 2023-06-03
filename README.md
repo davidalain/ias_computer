@@ -8,6 +8,9 @@
 ---
 title: Flowchart of IAS Operation
 ---
+---
+title: Flowchart of IAS Operation
+---
 flowchart TD
 
 subgraph "Fetch Cycle"
@@ -37,16 +40,17 @@ subgraph "Fetch Cycle"
 end
 
 subgraph "Execution Cycle"
-    subgraph "ADD M(X)"
+    DECODE --> |"ADD M(X)
+    (opcode: 00000101)"| ADD_MX
+    subgraph ADD_MX ["ADD M(X)"]
         ADD_MX__A("MBR ← M(MAR)")
         ADD_MX__B("MBR ← M(MAR)")
 
-        DECODE --> |"ADD M(X)
-        (opcode: 00000101)"| ADD_MX__A --> ADD_MX__B
+        ADD_MX__A ---> ADD_MX__B
     end
 
-        DECODE ---> |"ADD M(X)
-        (opcode: 00000111)"|ADD_MX2
+    DECODE ---> |"ADD M(X)
+    (opcode: 00000111)"|ADD_MX2
     subgraph ADD_MX2 ["ADD |M(X)|"]
         ADD_MX2__A("MBR ← M(MAR)")
         ADD_MX2__B("MBR[0] ← 0")
@@ -56,24 +60,22 @@ subgraph "Execution Cycle"
         ADD_MX2__B --> ADD_MX2__C
     end
 
-    subgraph "MUL M(X)"
+    DECODE --> |"MUL M(X)
+    (opcode: 00001011)"|MUL_MX
+    subgraph MUL_MX ["MUL M(X)"]
     MUL_MX_A("MBR ← M(MAR)")
     MUL_MX_B("AC ← (MQ + MBR)[0:39]
     MQ ← (MQ + MBR)[40:79]")
-
-    DECODE --> |"MUL M(X)
-    (opcode: 00001011)"|MUL_MX_A
-    MUL_MX_A --> MUL_MX_B
+    MUL_MX_A ---> MUL_MX_B
     end
 
-    subgraph "DIV M(X)"
+    DECODE ---> |"DIV M(X)
+    (opcode: 00001100)"|DIV_MX
+    subgraph DIV_MX ["DIV M(X)"]
     DIV_MX_A("MBR ← M(MAR)")
     DIV_MX_B("MQ ← AC/MBR
     AC ← AC%MBR")
-
-    DECODE --> |"DIV M(X)
-    (opcode: 00001100)"|DIV_MX_A
-    DIV_MX_A --> DIV_MX_B
+    DIV_MX_A ---> DIV_MX_B
     end
 end
 
@@ -89,7 +91,6 @@ end
 
 classDef greenClass fill:#008000
 classDef orangeClass fill:#FF6347
-
 
 
 
