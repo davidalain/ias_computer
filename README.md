@@ -82,8 +82,8 @@ subgraph "Execution Cycle"
     (opcode: 00001011)"|MUL_MX
     subgraph MUL_MX ["MUL M(X)"]
     MUL_MX_A("MBR ← M(MAR)")
-    MUL_MX_B("AC ← (MQ + MBR)[0:39]
-    MQ ← (MQ + MBR)[40:79]")
+    MUL_MX_B("AC ← (MQ * MBR)[0:39]
+    MQ ← (MQ * MBR)[40:79]")
     MUL_MX_A ---> MUL_MX_B
     end
 
