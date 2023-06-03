@@ -103,10 +103,11 @@ subgraph "End"
 
     ADD_MX__B --> END
     ADD_MX2__C --> END
-    MUL_MX_B --> END
-    DIV_MX_B --> END
     SUB_MX__B --> END
     SUB_MX2__C --> END
+    MUL_MX_B --> END
+    DIV_MX_B --> END
+    
 end
 
 classDef greenClass fill:#008000
