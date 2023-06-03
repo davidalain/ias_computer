@@ -62,6 +62,26 @@ subgraph "Execution Cycle"
         DECODE --> |"ADD M(X)
         (opcode: 00000101)"| ADD_MX__A --> ADD_MX__B
     end
+    
+    subgraph "MUL M(X)"
+    MUL_MX_A("MBR ← M(MAR)")
+    MUL_MX_B("AC ← (MQ + MBR)[0:39]
+    MQ ← (MQ + MBR)[40:79]")
+
+    DECODE --> |"MUL M(X)
+    (opcode: 00001011)"|MUL_MX_A
+    MUL_MX_A --> MUL_MX_B
+    end
+
+    subgraph "DIV M(X)"
+    DIV_MX_A("MBR ← M(MAR)")
+    DIV_MX_B("MQ ← AC/MBR
+    AC ← AC%MBR")
+
+    DECODE --> |"DIV M(X)
+    (opcode: 00001100)"|DIV_MX_A
+    DIV_MX_A --> DIV_MX_B
+    end
 end
 
 subgraph "End"
@@ -71,6 +91,8 @@ subgraph "End"
     LOAD_MQ__B --> END
     LOAD_MQ_MX__B --> END
     ADD_MX__B --> END
+    MUL_MX_B --> END
+    DIV_MX_B --> END
 end
 
 classDef greenClass fill:#008000
