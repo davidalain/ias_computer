@@ -95,6 +95,19 @@ subgraph "Execution Cycle"
     AC ← AC%MBR")
     DIV_MX_A ---> DIV_MX_B
     end
+
+    DECODE --> |"LSH
+    (opcode: 00010100)"|LSH_A
+    subgraph LSH_A ["LSH"]
+        LSH("AC ← AC << 1")
+    end
+
+    DECODE --> |"RSH
+    (opcode: 00010101)"|RSH_A
+    subgraph RSH_A ["RSH"]
+        RSH("AC ← AC >> 1")
+    end    
+
 end
 
 subgraph "End"
@@ -107,6 +120,8 @@ subgraph "End"
     SUB_MX2__C --> END
     MUL_MX_B --> END
     DIV_MX_B --> END
+    LSH_A ---> END
+    RSH_A ---> END
     
 end
 
