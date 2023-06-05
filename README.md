@@ -11,8 +11,8 @@ title: Flowchart of IAS Operation
 flowchart TD
 
 subgraph "Fetch Cycle"
-    START((Start)):::greenClass --> B{"Is next 
-    instruction 
+    START((Start)):::greenClass --> B{"Is next
+    instruction
     in IBR?"}
     B --> |"Yes
 
@@ -40,8 +40,10 @@ subgraph "Execution Cycle"
     DECODE --> |"ADD M(X)
     (opcode: 00000101)"| ADD_MX
     subgraph ADD_MX ["ADD M(X)"]
+        %% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
         ADD_MX__A("MBR ← M(MAR)")
-        ADD_MX__B("MBR ← M(MAR)")
+        %% O conteúdo do MBR é adicionado ao AC, com o resultado sendo armazenado novamente no AC %%
+        ADD_MX__B("AC ← AC + MBR")
 
         ADD_MX__A ---> ADD_MX__B
     end
@@ -49,10 +51,13 @@ subgraph "Execution Cycle"
     DECODE ---> |"ADD M(X)
     (opcode: 00000111)"|ADD_MX2
     subgraph ADD_MX2 ["ADD |M(X)|"]
+        %% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
         ADD_MX2__A("MBR ← M(MAR)")
+        %% O bit mais significativo do MBR é setado como 0
         ADD_MX2__B("MBR[0] ← 0")
+        %% O conteúdo do MBR é adicionado ao AC, com o resultado sendo armazenado novamente no AC %%
         ADD_MX2__C("AC ← AC + MBR")
-        
+
         ADD_MX2__A --> ADD_MX2__B
         ADD_MX2__B --> ADD_MX2__C
     end
@@ -62,7 +67,7 @@ subgraph "Execution Cycle"
     subgraph SUB_MX ["SUB M(X)"]
         SUB_MX__A("MBR ← M(MAR)")
         SUB_MX__B("AC ← AC - MBR")
-        
+
         SUB_MX__A ---> SUB_MX__B
     end
 
@@ -72,9 +77,9 @@ subgraph "Execution Cycle"
         SUB_MX2__A("MBR ← M(MAR)")
         SUB_MX2__B("MBR[0] ← 0")
         SUB_MX2__C("AC ← AC - MBR")
-        
+
         SUB_MX2__A --> SUB_MX2__B
-        SUB_MX2__B --> SUB_MX2__C     
+        SUB_MX2__B --> SUB_MX2__C
     end
 
 
@@ -106,7 +111,7 @@ subgraph "Execution Cycle"
     (opcode: 00010101)"|RSH_A
     subgraph RSH_A ["RSH"]
         RSH("AC ← AC >> 1")
-    end    
+    end
 
 end
 
@@ -122,7 +127,7 @@ subgraph "End"
     DIV_MX_B --> END
     LSH_A ---> END
     RSH_A ---> END
-    
+
 end
 
 classDef greenClass fill:#008000
