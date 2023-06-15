@@ -91,10 +91,14 @@ subgraph "Execution Cycle"
     DECODE --> |"MUL M(X)
     (opcode: 00001011)"|MUL_MX
     subgraph MUL_MX ["MUL M(X)"]
-    MUL_MX_A("MBR ← M(MAR)")
-    MUL_MX_B("AC ← (MQ * MBR)[0:39]
-    MQ ← (MQ * MBR)[40:79]")
-    MUL_MX_A ---> MUL_MX_B
+	%% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
+    	MUL_MX_A("MBR ← M(MAR)")
+	%% O conteúdo do MQ é multiplicado com MBR, resultando em um número binario de 80 bits [0:79]%%
+	%% A parte mais significativa [0:39] é armazenada em AC%%
+	%% A parte menos significativa [40:79] é armazenada em MQ%%
+    	MUL_MX_B("AC ← (MQ * MBR)[0:39]
+    	MQ ← (MQ * MBR)[40:79]")
+    	MUL_MX_A ---> MUL_MX_B
     end
 
     DECODE ---> |"DIV M(X)
