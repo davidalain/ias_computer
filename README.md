@@ -65,7 +65,9 @@ subgraph "Execution Cycle"
     DECODE --> |"SUB M(X)
     (opcode: 00000110)"|SUB_MX
     subgraph SUB_MX ["SUB M(X)"]
+	%% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
         SUB_MX__A("MBR ← M(MAR)")
+	%% O conteúdo do MBR é subtraido do AC, com o resultado sendo armazenado novamente no AC %%
         SUB_MX__B("AC ← AC - MBR")
 
         SUB_MX__A ---> SUB_MX__B
