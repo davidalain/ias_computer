@@ -104,9 +104,13 @@ subgraph "Execution Cycle"
     DECODE ---> |"DIV M(X)
     (opcode: 00001100)"|DIV_MX
     subgraph DIV_MX ["DIV M(X)"]
-    DIV_MX_A("MBR ← M(MAR)")
-    DIV_MX_B("MQ ← AC/MBR
-    AC ← AC%MBR")
+	%% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
+    	DIV_MX_A("MBR ← M(MAR)")
+	%% O conteúdo do MQ é dividido com MBR%%
+	%% O quociente é armazendo em MQ%%
+	%% O resto é armazenado em AC%%
+    	DIV_MX_B("MQ ← AC/MBR
+    	AC ← AC%MBR")
     DIV_MX_A ---> DIV_MX_B
     end
 
