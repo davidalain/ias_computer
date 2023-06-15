@@ -117,12 +117,14 @@ subgraph "Execution Cycle"
     DECODE --> |"LSH
     (opcode: 00010100)"|LSH_A
     subgraph LSH_A ["LSH"]
+	%% O conteúdo de AC é deslocado para a esquerda e armazenado em AC%%
         LSH("AC ← AC << 1")
     end
 
     DECODE --> |"RSH
     (opcode: 00010101)"|RSH_A
     subgraph RSH_A ["RSH"]
+	%% O conteúdo de AC é deslocado para a direita e armazenado em AC%%
         RSH("AC ← AC >> 1")
     end
 
