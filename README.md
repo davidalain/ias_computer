@@ -1,13 +1,13 @@
-%% # ias_computer
+# ias_computer
 
-%% <!-- <Flowchart> -->
+<!-- <Flowchart> -->
 
-%% ### Fluxograma do funcionamento do Computador IAS 
+### Fluxograma do funcionamento do Computador IAS 
 
-%% ```mermaid
-%% ---
-%% title: Flowchart of IAS Operation
-%% ---
+```mermaid
+---
+title: Flowchart of IAS Operation
+---
 flowchart TD
 
 subgraph "Fetch Cycle"
@@ -121,3 +121,10 @@ subgraph "  End"
    JUMP1_MXR2 --> END
    JUMP1_MXR3 --> END
 end
+
+classDef greenClass fill:#008000
+classDef orangeClass fill:#FF6347
+
+
+
+```
