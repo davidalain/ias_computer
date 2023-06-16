@@ -134,12 +134,12 @@ subgraph "End"
     END(("Go back
     to Start")):::greenClass
 
-    ADD_MX__B --> END
-    ADD_MX2__C --> END
-    SUB_MX__B --> END
-    SUB_MX2__C --> END
-    MUL_MX_B --> END
-    DIV_MX_B --> END
+    ADD_MX --> END
+    ADD_MX2 --> END
+    SUB_MX --> END
+    SUB_MX2 --> END
+    MUL_MX --> END
+    DIV_MX --> END
     LSH_A ---> END
     RSH_A ---> END
 
