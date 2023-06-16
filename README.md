@@ -2,7 +2,7 @@
 
 <!-- <Flowchart> -->
 
-### Fluxograma do funcionamento do Computador IAS
+### Fluxograma do funcionamento do Computador IAS - Grupo 2
 
 ```mermaid
 ---
