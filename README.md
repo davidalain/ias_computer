@@ -51,11 +51,11 @@ subgraph "Execution Cycle"
     end
 
     subgraph "STOR M(X, 28:39)"
-                    <!-- Essa instrução serve para substituir os bits localizados 
-            a direita de m(x), ou seja, do bit 28 a 39 por respectivamente os bits do 28 a 39 do AC.
-            Mas para isso o processo passa pelo MBR, pois só ele tem acesso direto a memória.
-            Sendo assim, todo o conteúdo de m(mar) é passado para o MBR, que substituirá o atual conteudo recebido do bit 28 ao 39 pelos os bit do 28 a 39 do AC.
-            Feita essa alteração no MBR, é possível agora transferir esse conteudo atualizado para o m(mar). E assim é feita a modificação do lado direito de m(x). -->
+            %%         <!-- Essa instrução serve para substituir os bits localizados 
+            %% a direita de m(x), ou seja, do bit 28 a 39 por respectivamente os bits do 28 a 39 do AC.
+            %% Mas para isso o processo passa pelo MBR, pois só ele tem acesso direto a memória.
+            %% Sendo assim, todo o conteúdo de m(mar) é passado para o MBR, que substituirá o atual conteudo recebido do bit 28 ao 39 pelos os bit do 28 a 39 do AC.
+            %% Feita essa alteração no MBR, é possível agora transferir esse conteudo atualizado para o m(mar). E assim é feita a modificação do lado direito de m(x). -->
         STOR_MXR1("MBR ← M(MAR)")
         STOR_MXR2("MBR(28:39) ← AC(28:39)")
         STOR_MXR3("M(MAR) ← MBR")
@@ -128,7 +128,3 @@ end
 
 classDef greenClass fill:#008000
 classDef orangeClass fill:#FF6347
-
-
-
-```
