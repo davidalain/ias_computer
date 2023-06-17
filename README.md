@@ -39,7 +39,11 @@ end
 subgraph "Execution Cycle"
 
    subgraph "STOR M(X, 8:19)"
-
+            %%      <!-- Essa instrução serve para substituir os bits de endereço da instrução 
+            %% esquerda de M(X), ou seja, do bit 8 ao 19, pelos bits 28 ao 39 em AC.
+            %% Mas, para que isso ocorra, o processo passa pelo MBR, pois só ele tem acesso direto à memória.
+            %% Sendo asssim, todo o conteúdo de M(MAR) é passado para o MBR, que substituirá os bits 8:19 pelos 28:39 do AC. 
+            %% Feita essa alteração no MBR, é possível agora transferir esse conteúdo atualizado para o M(MAR). E assim é feita a modificação dos bits de endereço da instrução esquerda de M(MAR). -->
         STOR_MXL1("MBR ← M(MAR)")
         STOR_MXL2("MBR(8:19) ← AC(28:39)")
         STOR_MXL3("M(MAR) ← MBR")
