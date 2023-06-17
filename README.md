@@ -31,13 +31,17 @@ subgraph "Fetch Cycle"
     IR ← MBR(0:7)
     MAR ← MBR(8:19)")
     H --> I("PC ← PC + 1")
-    I --> DECODE
-    G --> DECODE
-    DECODE{{"Decode instruction in IR"}}:::orangeClass
+    
 end
+subgraph DECODE
+	DECODE_A{{"Decode instruction in IR"}}:::orangeClass
+	I  --> DECODE_A
+    	G --> DECODE_A
+end
+style DECODE fill:transparent,stroke:transparent
 
 subgraph "Execution Cycle"
-    DECODE --> |"ADD M(X)
+    DECODE_A --> |"ADD M(X)
     (opcode: 00000101)"| ADD_MX
     subgraph ADD_MX ["ADD M(X)"]
         %% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
@@ -48,7 +52,7 @@ subgraph "Execution Cycle"
         ADD_MX__A ---> ADD_MX__B
     end
 
-    DECODE ---> |"ADD M(X)
+    DECODE_A ---> |"ADD M(X)
     (opcode: 00000111)"|ADD_MX2
     subgraph ADD_MX2 ["ADD |M(X)|"]
         %% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
@@ -62,7 +66,7 @@ subgraph "Execution Cycle"
         ADD_MX2__B --> ADD_MX2__C
     end
 
-    DECODE --> |"SUB M(X)
+    DECODE_A --> |"SUB M(X)
     (opcode: 00000110)"|SUB_MX
     subgraph SUB_MX ["SUB M(X)"]
 	%% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
@@ -73,7 +77,7 @@ subgraph "Execution Cycle"
         SUB_MX__A ---> SUB_MX__B
     end
 
-    DECODE --> |"SUB |M(X)|
+    DECODE_A --> |"SUB |M(X)|
     (opcode: 00001000)"|SUB_MX2
     subgraph SUB_MX2 ["SUB |M(X)|"]
 	%% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
@@ -88,7 +92,7 @@ subgraph "Execution Cycle"
     end
 
 
-    DECODE --> |"MUL M(X)
+    DECODE_A --> |"MUL M(X)
     (opcode: 00001011)"|MUL_MX
     subgraph MUL_MX ["MUL M(X)"]
 	%% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
@@ -101,7 +105,7 @@ subgraph "Execution Cycle"
     	MUL_MX_A ---> MUL_MX_B
     end
 
-    DECODE ---> |"DIV M(X)
+    DECODE_A ---> |"DIV M(X)
     (opcode: 00001100)"|DIV_MX
     subgraph DIV_MX ["DIV M(X)"]
 	%% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
@@ -114,14 +118,14 @@ subgraph "Execution Cycle"
     DIV_MX_A ---> DIV_MX_B
     end
 
-    DECODE --> |"LSH
+    DECODE_A --> |"LSH
     (opcode: 00010100)"|LSH_A
     subgraph LSH_A ["LSH"]
 	%% O conteúdo de AC é deslocado para a esquerda e armazenado em AC%%
         LSH("AC ← AC << 1")
     end
 
-    DECODE --> |"RSH
+    DECODE_A --> |"RSH
     (opcode: 00010101)"|RSH_A
     subgraph RSH_A ["RSH"]
 	%% O conteúdo de AC é deslocado para a direita e armazenado em AC%%
@@ -130,7 +134,7 @@ subgraph "Execution Cycle"
 
 end
 
-subgraph "End"
+subgraph END_S ["End"]
     END(("Go back
     to Start")):::greenClass
 
@@ -144,6 +148,7 @@ subgraph "End"
     RSH_A ---> END
 
 end
+style END_S fill:transparent,stroke:transparent
 
 classDef greenClass fill:#008000
 classDef orangeClass fill:#FF6347
