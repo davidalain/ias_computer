@@ -80,13 +80,14 @@ subgraph "Execution Cycle"
         JUMP_MXR1 ---> JUMP_MXR2
     end
 
-    DECODE_A ---> |"JUMP+ M(X, 0:19)
+
+   DECODE_A ---> |"JUMP+ M(X, 0:19)
     (opcode: 00001111)"|JUMP+_ML
     subgraph JUMP+_ML ["JUMP+ M(X, 0:19)"]
+      %% <!-- A instrução JUMP+ M(X, 0:19) tem o efeito de saltar para a instrução esquerda da memória apenas se o valor contido no registrador AC for maior ou igual a zero, indicando que AC não é um número negativo. Caso contrário, se o valor em AC for negativo, o fluxo de execução continua normalmente, seguindo para a instrução subsequente à instrução JUMP+.  -->
         JUMP1_MXL1{"AC>= 0"}
-        JUMP1_MXL1 --> |Yes| JUMP1_MXL2("PC ← MAR")
-        JUMP1_MXL1 ---> |NO| JUMP1_MXL3("AC ← AC + M(X)")       
-        JUMP1_MXL1 
+        JUMP1_MXL1 --> |Yes| JUMP1_MXL2("MAR ← MBR(8:19)")
+        JUMP1_MXL2 -->  JUMP1_MXL3("PC ← MAR")
     end
 
     DECODE_A ---> |"JUMP+ M(X, 20:39)
