@@ -45,11 +45,7 @@ subgraph "Execution Cycle"
     DECODE_A --> |"STOR M(X, 8:19)
     (opcode: 00010010)" | STOR_MXL
     subgraph STOR_MXL ["STOR M(X, 8:19)"]
-            %%      <!-- Essa instrução serve para substituir os bits de endereço da instrução 
-            %% esquerda de M(X), ou seja, do bit 8 ao 19, pelos bits 28 ao 39 em AC.
-            %% Mas, para que isso ocorra, o processo passa pelo MBR, pois só ele tem acesso direto à memória.
-            %% Sendo asssim, todo o conteúdo de M(MAR) é passado para o MBR, que substituirá os bits 8:19 pelos 28:39 do AC. 
-            %% Feita essa alteração no MBR, é possível agora transferir esse conteúdo atualizado para o M(MAR). E assim é feita a modificação dos bits de endereço da instrução esquerda de M(MAR). -->
+            %%      <!-- Essa instrução substitui os bits de endereço da instrução esquerda, do bit 28 ao 39, de um local de memória chamado M(X), pelos bits do 28 ao 39 do acumulador (AC). Para isso, o processo passa pelo Registrador de Memória do Barramento (MBR), pois o AC não tem acesso direto à memória. Dessa forma, o conteúdo da memória tem que ser transferido para o MBR, que pode acessar tanto a memória quanto o AC. Então, o MBR substitui os bits do 8 ao 19 pelo conteúdo dos bits do 28 ao 39 do AC. Após a modificação, o conteúdo atualizado é transferido de volta para a memória M(X), finalizando o processo de modificação do campo de endereço da instrução esquerda em M(X). -->
         STOR_MXL1("MBR ← M(MAR)")
         STOR_MXL2("MBR(8:19) ← AC(28:39)")
         STOR_MXL3("M(MAR) ← MBR")
@@ -60,7 +56,7 @@ subgraph "Execution Cycle"
     DECODE_A --> |"STOR M(X, 28:39)
     (opcode: 00010011)"|STOR_MXR 
     subgraph STOR_MXR ["STOR M(X, 28:39)"]
-        %% <!-- Essa instrução substitui os bits de endereço na instrução direita, do bit 28º ao 39º, de um local de memória chamado m(x), pelos respectivos bits do 28º ao 39º do acumulador (AC). Para isso, o processo passa pelo Registrador de Memória do Barramento (MBR), pois o AC não tem acesso direto à memória. Dessa forma, o conteúdo da memória tem que ser transferido para o MBR, que pode acessar tanto memória quanto o AC.Então, o MBR substitui os bits do 28º ao 39º pelo conteúdo correspondente do AC. Após a modificação, o conteúdo atualizado é transferido de volta para a memória m(x), finalizando o processo de modificação do campo de endereço da instrução direita em m(x). -->
+        %% <!-- Essa instrução substitui os bits de endereço na instrução direita, do bit 28º ao 39º, de um local de memória chamado M(X), pelos respectivos bits do 28º ao 39º do acumulador (AC). Para isso, o processo passa pelo Registrador de Memória do Barramento (MBR), pois o AC não tem acesso direto à memória. Dessa forma, o conteúdo da memória tem que ser transferido para o MBR, que pode acessar tanto a memória quanto o AC.Então, o MBR substitui os bits do 28º ao 39º pelo conteúdo correspondente do AC. Após a modificação, o conteúdo atualizado é transferido de volta para a memória M(X), finalizando o processo de modificação do campo de endereço da instrução direita em M(X). -->
         STOR_MXR1("MBR ← M(MAR)")
         STOR_MXR2("MBR(28:39) ← AC(28:39)")
         STOR_MXR3("M(MAR) ← MBR")
