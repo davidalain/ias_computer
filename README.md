@@ -41,9 +41,9 @@ end
 style DECODE fill:transparent,stroke:transparent
 
 subgraph "Execution Cycle"
-    DECODE_A --> |"STOR M(X, 8:19)
-        (opcode: 00010010)" | STOR_MXL
 
+    DECODE_A --> |"STOR M(X, 8:19)
+    (opcode: 00010010)" | STOR_MXL
     subgraph STOR_MXL ["STOR M(X, 8:19)"]
             %%      <!-- Essa instrução serve para substituir os bits de endereço da instrução 
             %% esquerda de M(X), ou seja, do bit 8 ao 19, pelos bits 28 ao 39 em AC.
@@ -53,87 +53,74 @@ subgraph "Execution Cycle"
         STOR_MXL1("MBR ← M(MAR)")
         STOR_MXL2("MBR(8:19) ← AC(28:39)")
         STOR_MXL3("M(MAR) ← MBR")
-
         STOR_MXL1 --> STOR_MXL2
         STOR_MXL2 --> STOR_MXL3
     end
 
-
     DECODE_A --> |"STOR M(X, 28:39)
-        (opcode: 00010011)"|STOR_MXR 
+    (opcode: 00010011)"|STOR_MXR 
     subgraph STOR_MXR ["STOR M(X, 28:39)"]
         %% <!-- Essa instrução substitui os bits de endereço na instrução direita, do bit 28º ao 39º, de um local de memória chamado m(x), pelos respectivos bits do 28º ao 39º do acumulador (AC). Para isso, o processo passa pelo Registrador de Memória do Barramento (MBR), pois o AC não tem acesso direto à memória. Dessa forma, o conteúdo da memória tem que ser transferido para o MBR, que pode acessar tanto memória quanto o AC.Então, o MBR substitui os bits do 28º ao 39º pelo conteúdo correspondente do AC. Após a modificação, o conteúdo atualizado é transferido de volta para a memória m(x), finalizando o processo de modificação do campo de endereço da instrução direita em m(x). -->
         STOR_MXR1("MBR ← M(MAR)")
         STOR_MXR2("MBR(28:39) ← AC(28:39)")
         STOR_MXR3("M(MAR) ← MBR")
-
         STOR_MXR1 --> STOR_MXR2
         STOR_MXR2 --> STOR_MXR3
     end
 
     DECODE_A ---> |"JUMP M(X, 0:19)
-        (opcode: 00001101)"|JUMP_ML
-
+    (opcode: 00001101)"|JUMP_ML
     subgraph JUMP_ML ["JUMP M(X, 0:19)"]
-
         JUMP_MXL1("IBR ← M(MAR,0:19)")
-        JUMP_MXL2("PC ← MAR")
-        
+        JUMP_MXL2("PC ← MAR")     
         JUMP_MXL1 ---> JUMP_MXL2
     end
 
     DECODE_A ---> |"JUMP M(X, 20:39)
-        (opcode: 00001110)"|JUMP_MR
-
+    (opcode: 00001110)"|JUMP_MR
     subgraph JUMP_MR ["JUMP M(X, 20:39)"]
-
         JUMP_MXR1("IBR ← M(MAR,20:39)")
         JUMP_MXR2("PC ← MAR")
-        
         JUMP_MXR1 ---> JUMP_MXR2
     end
 
     DECODE_A ---> |"JUMP+ M(X, 0:19)
-        (opcode: 00001111)"|JUMP+_ML
-
+    (opcode: 00001111)"|JUMP+_ML
     subgraph JUMP+_ML ["JUMP+ M(X, 0:19)"]
-
         JUMP1_MXL1{"AC>= 0"}
         JUMP1_MXL1 --> |Yes| JUMP1_MXL2("PC ← MAR")
-        JUMP1_MXL1 ---> |NO| JUMP1_MXL3("AC ← AC + M(X)")
-        
+        JUMP1_MXL1 ---> |NO| JUMP1_MXL3("AC ← AC + M(X)")       
         JUMP1_MXL1 
     end
 
     DECODE_A ---> |"JUMP+ M(X, 20:39)
-        (opcode: 00010000)"|JUMP+_MR
-
+    (opcode: 00010000)"|JUMP+_MR
     subgraph JUMP+_MR ["JUMP+ M(X, 20:39)"]
-
         JUMP1_MXR1{"AC>= 0"}
         JUMP1_MXR1 --> |Yes| JUMP1_MXR2("PC ← MAR")
         JUMP1_MXR1 ---> |NO| JUMP1_MXR3("AC ← AC + M(X)")
-
         JUMP1_MXR1 
     end
 
 end
 
-subgraph "End"
+subgraph END_S ["End"]
     END(("Go back
     to Start")):::greenClass
 
-    STOR_MXL3 --> END
-    STOR_MXR3 --> END
-    JUMP_MXL2 --> END
-    JUMP_MXR2 --> END
-    JUMP1_MXL2 ---> END
-    JUMP1_MXL3 --> END
-    JUMP1_MXR2 ---> END
-    JUMP1_MXR3 ---> END  
+    STOR_MXL --> END
+    STOR_MXR  --> END
+    JUMP_ML --> END
+    JUMP_MR --> END
+    JUMP+_ML ---> END
+    JUMP+_MR ---> END
+    
 end
 
-style END fill:transparent,stroke:transparent
+style END_S fill:transparent,stroke:transparent
 
 classDef greenClass fill:#008000
 classDef orangeClass fill:#FF6347
+
+
+```
