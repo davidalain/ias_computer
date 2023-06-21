@@ -12,6 +12,7 @@ flowchart TD
 
 %% Helton Jose Carneiro de Lima, heltoncarneiro %%
 %% Gustavo Osório Bernardo Thompson Flores, gustavobtflores %%
+%% Joel Rodrigues Viera, joelrodriguesvieira %%
 
 subgraph "Fetch Cycle"
     START((Start)):::greenClass --> B{"Is next
