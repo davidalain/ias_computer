@@ -10,11 +10,7 @@ title: Flowchart of IAS Operation
 ---
 flowchart TD
 
-%%
-Helton Jose Carneiro de Lima, heltoncarneiro
-
-
-%%
+%% Helton Jose Carneiro de Lima, heltoncarneiro %%
 
 subgraph "Fetch Cycle"
     START((Start)):::greenClass --> B{"Is next
