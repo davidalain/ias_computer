@@ -67,6 +67,7 @@ subgraph "Execution Cycle"
     DECODE_A ---> |"JUMP M(X, 0:19)
     (opcode: 00001101)"|JUMP_ML
     subgraph JUMP_ML ["JUMP M(X, 0:19)"]
+%% A instrução "jump" permite que um programa salte para uma nova instrução na memória. Ela acessa uma palavra de memória de 40 bits armazenada em M(X), contendo duas instruções, mas sempre executa a instrução de endereço esquerda. O que significa que esse endereço de memória M(8:19) é copiado para o PC, forçando-o a ser a próxima instrução a ser lida no ciclo de busca.
         JUMP_MXL1("IBR ← M(MAR,0:19)")
         JUMP_MXL2("PC ← MAR")     
         JUMP_MXL1 ---> JUMP_MXL2
@@ -75,6 +76,7 @@ subgraph "Execution Cycle"
     DECODE_A ---> |"JUMP M(X, 20:39)
     (opcode: 00001110)"|JUMP_MR
     subgraph JUMP_MR ["JUMP M(X, 20:39)"]
+%% A instrução "jump" permite que um programa salte para uma nova instrução na memória. Ela acessa uma palavra de memória de 40 bits armazenada em M(X), contendo duas instruções, mas sempre executa a instrução de endereço direita. O que significa que esse endereço de memória M(28:39) é copiado para o PC, forçando-o a ser a próxima instrução a ser lida no ciclo de busca. 
         JUMP_MXR1("IBR ← M(MAR,20:39)")
         JUMP_MXR2("PC ← MAR")
         JUMP_MXR1 ---> JUMP_MXR2
