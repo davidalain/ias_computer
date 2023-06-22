@@ -130,6 +130,8 @@ style FC fill:transparent,stroke:transparent
     END(("Go back
     to Start")):::greenClass
 
+    style End fill:transparent,stroke:transparent
+
     loadmq_sp --- END
     loadmqmx_sp --- END
     stormx_sp --- END
