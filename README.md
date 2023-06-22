@@ -9,12 +9,12 @@
 title: Flowchart of IAS Operation
 ---
 
-## Integrantes do projeto:
-## - Eliane de Melo Cordeiro (GitHub: ElianeCordeiro)
-## - Flávio Filipe França Farias (GitHub: trewq010)
-## - Maria Eduarda Veloso Cânha (GitHub: dudacanha)
-## - Laura Maria Farias Silva (GitHub: laura-farias-dev)
-## - Wanessa Santana Ferreira (GitHub: Wanessaa)
+%% # Integrantes do projeto:
+%% # - Eliane de Melo Cordeiro (GitHub: ElianeCordeiro)
+%% # - Flávio Filipe França Farias (GitHub: trewq010)
+%% # - Maria Eduarda Veloso Cânha (GitHub: dudacanha)
+%% # - Laura Maria Farias Silva (GitHub: laura-farias-dev)
+%% # - Wanessa Santana Ferreira (GitHub: Wanessaa)
 
 flowchart TD
 
