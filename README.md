@@ -97,7 +97,7 @@ subgraph "Execution Cycle"
         JUMP_MXR1("MBR ← M(MAR)")
         JUMP_MXR2("MAR ← MBR(28:39)")
         JUMP_MXR3("PC ← MAR")
-        JUMP_MXR4("Reset")
+        JUMP_MXR4("Reset IBR")
 
         JUMP_MXR1 ---> JUMP_MXR2
         JUMP_MXR2 ---> JUMP_MXR3
