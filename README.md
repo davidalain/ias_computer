@@ -138,6 +138,7 @@ subgraph "Execution Cycle"
     %% A instrução JUMP+ M(X, 20:39) tem o efeito de saltar para a instrução direita da memória apenas se o valor contido no registrador AC for maior ou igual a zero, indicando que AC não é um número negativo. Caso contrário, se o valor em AC for negativo, o fluxo de execução continua normalmente, mantendo os mesmos valores nos registradores.  
       
     subgraph JUMP+_MR ["JUMP+ M(X, 20:39)"]
+        JUMP1_MXR1{"AC>= 0"}
         JUMP1_MXR2("MBR ← M(MAR)")
         JUMP1_MXR3("MAR ← MBR(28:39)")
         JUMP1_MXR4("PC ← MAR")
