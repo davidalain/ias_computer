@@ -77,55 +77,65 @@ subgraph "Execution Cycle"
     DECODE_A --> |"JUMP M(X, 0:19)
     (opcode: 00001101)"|JUMP_ML
     subgraph JUMP_ML ["JUMP M(X, 0:19)"]
-    %% A instrução JUMP M(X, 0:19) permite que um programa salte para uma nova instrução na memória. Ela acessa uma palavra de memória de 40 bits armazenada em M(X), contendo duas instruções, mas sempre executa a instrução de endereço esquerda. O que significa que esse endereço de memória M(8:19) é copiado para o PC, forçando-o a ser a próxima instrução a ser lida no ciclo de busca.
-	JUMP_MXL1("MBR ← M(MAR)")
+    %%A instrução JUMP M(X, 0:19), ao receber o endereço de memória (MAR) do ciclo de busca, acessa a palavra de memória correspondente que contém duas instruções. O endereço de memória presente na instrução localizada à esquerda é lido e  armazenado no contador de programa (PC). O que simboliza que a instrução indicada por esse endereço será executada no próximo ciclo, independente do conteúdo do registrador IBR ou o que estava armazenado anteriormente em PC.
+
+	    JUMP_MXL1("MBR ← M(MAR)")
         JUMP_MXL2("MAR ← MBR(8:19)")
         JUMP_MXL3("PC ← MAR")
+        JUMP_MXL4("Reset IBR")
 
         JUMP_MXL1 ---> JUMP_MXL2
         JUMP_MXL2 ---> JUMP_MXL3
+        JUMP_MXL3 ---> JUMP_MXL4
     end
 
     DECODE_A --> |"JUMP M(X, 20:39)
     (opcode: 00001110)"|JUMP_MR
     subgraph JUMP_MR ["JUMP M(X, 20:39)"]
-    %% A instrução JUMP M(X, 20:39) permite que um programa salte para uma nova instrução na memória. Ela acessa uma palavra de memória de 40 bits armazenada em M(X), contendo duas instruções, mas sempre executa a instrução de endereço direita. O que significa que esse endereço de memória M(28:39) é copiado para o PC, forçando-o a ser a próxima instrução a ser lida no ciclo de busca. 
+    %% A instrução JUMP M(X, 20:39), ao receber o endereço de memória (MAR), acessa a palavra de memória correspondente que contém duas instruções. O endereço de memória presente na instrução localizada à direita é armazenado no contador de programa (PC). O que simboliza que a instrução indicada por endereço será executada no próximo ciclo de forma irrestrita, independente do conteúdo do registrador IBR ou o que estava armazenado anteriormente em PC.
+
         JUMP_MXR1("MBR ← M(MAR)")
         JUMP_MXR2("MAR ← MBR(28:39)")
         JUMP_MXR3("PC ← MAR")
+        JUMP_MXR4("Reset")
 
         JUMP_MXR1 ---> JUMP_MXR2
         JUMP_MXR2 ---> JUMP_MXR3
+        JUMP_MXR3 ---> JUMP_MXR4
 
     end
 
    DECODE_A ----> |"JUMP+ M(X, 0:19)
     (opcode: 00001111)"|JUMP+_ML
     subgraph JUMP+_ML ["JUMP+ M(X, 0:19)"]
-    %% A instrução JUMP+ M(X, 0:19) tem o efeito de saltar para a instrução esquerda da memória apenas se o valor contido no registrador AC for maior ou igual a zero, indicando que AC não é um número negativo. Caso contrário, se o valor em AC for negativo, o fluxo de execução continua normalmente, seguindo para a instrução subsequente à instrução JUMP+. 
+    %% A instrução JUMP+ M(X, 0:19) tem o efeito de saltar para a instrução esquerda da memória apenas se o valor contido no registrador AC for maior ou igual a zero, indicando que AC não é um número negativo. Caso contrário, se o valor em AC for negativo, o fluxo de execução continua normalmente, mantendo os mesmos valores nos registradores.
         JUMP1_MXL1{"AC>= 0"}
         JUMP1_MXL2("MBR ← M(MAR)")
         JUMP1_MXL3("MAR ← MBR(8:19)")
         JUMP1_MXL4("PC ← MAR")
+        JUMP1_MXL5("Reset IBR")
        
         JUMP1_MXL1 --> |Yes| JUMP1_MXL2
-        JUMP1_MXL2 --->  JUMP1_MXL3
+        JUMP1_MXL2 -->  JUMP1_MXL3
         JUMP1_MXL3 -->  JUMP1_MXL4
+        JUMP1_MXL4 -->  JUMP1_MXL5
        
     end
 
     DECODE_A ----> |"JUMP+ M(X, 20:39)
     (opcode: 00010000)"|JUMP+_MR
     subgraph JUMP+_MR ["JUMP+ M(X, 20:39)"]
-    %% A instrução JUMP+ M(X, 20:39) tem o efeito de saltar para a instrução direita da memória apenas se o valor contido no registrador AC for maior ou igual a zero, indicando que AC não é um número negativo. Caso contrário, se o valor em AC for negativo, o fluxo de execução continua normalmente, seguindo para a instrução subsequente à instrução JUMP+.  
-        JUMP1_MXR1{"AC>= 0"}
+    %% A instrução JUMP+ M(X, 20:39) tem o efeito de saltar para a instrução direita da memória apenas se o valor contido no registrador AC for maior ou igual a zero, indicando que AC não é um número negativo. Caso contrário, se o valor em AC for negativo, o fluxo de execução continua normalmente, mantendo os mesmos valores nos registradores.
+
         JUMP1_MXR2("MBR ← M(MAR)")
         JUMP1_MXR3("MAR ← MBR(28:39)")
         JUMP1_MXR4("PC ← MAR")
+        JUMP1_MXR5("Reset IBR")
 
         JUMP1_MXR1 --> |Yes| JUMP1_MXR2
-        JUMP1_MXR2 --->  JUMP1_MXR3
+        JUMP1_MXR2 -->  JUMP1_MXR3
         JUMP1_MXR3 -->  JUMP1_MXR4
+        JUMP1_MXR4 -->  JUMP1_MXR5
     end
 
 end
@@ -138,9 +148,9 @@ subgraph END_S ["End"]
     STOR_MXR  --> END
     JUMP_ML --> END
     JUMP_MR --> END
-    JUMP1_MXL4 --> END
+    JUMP1_MXL5 --> END
     JUMP1_MXL1 --> |No| END
-    JUMP1_MXR4 --> END
+    JUMP1_MXR5 --> END
     JUMP1_MXR1 --> |No| END
 
     
