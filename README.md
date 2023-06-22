@@ -32,12 +32,16 @@ subgraph "Fetch Cycle"
     MAR ← MBR(8:19)")
     H --> I("PC ← PC + 1")
 end
+
 subgraph FC[ ]
     I --> DECODE
     G --> DECODE
     DECODE{{"Decode instruction in IR"}}:::orangeClass
     DECODE --- link[ ]
 end
+
+style FC fill:transparent,stroke:transparent
+
     subgraph execution_cycle [Execution Cycle]
 
         link --->|"LOAD MQ
