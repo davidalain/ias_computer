@@ -109,7 +109,7 @@ subgraph "Execution Cycle"
         JUMP1_MXL4("PC ← MAR")
        
         JUMP1_MXL1 --> |Yes| JUMP1_MXL2
-        JUMP1_MXL2 -->  JUMP1_MXL3
+        JUMP1_MXL2 --->  JUMP1_MXL3
         JUMP1_MXL3 -->  JUMP1_MXL4
        
     end
@@ -124,7 +124,7 @@ subgraph "Execution Cycle"
         JUMP1_MXR4("PC ← MAR")
 
         JUMP1_MXR1 --> |Yes| JUMP1_MXR2
-        JUMP1_MXR2 -->  JUMP1_MXR3
+        JUMP1_MXR2 --->  JUMP1_MXR3
         JUMP1_MXR3 -->  JUMP1_MXR4
     end
 
