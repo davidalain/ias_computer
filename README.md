@@ -12,6 +12,7 @@ flowchart TB
 
 %% José Otávio Gurgel Souto
 %% Fagner Timoteo da Silva
+%% João Pedro Bezerra Oliveira
 
 subgraph "Fetch Cycle"
     START((Start)):::greenClass --> B{"Is next 
