@@ -82,10 +82,10 @@ subgraph "Execution Cycle"
     DECODE_A --> |"JUMP M(X, 0:19)
     (opcode: 00001101)"|JUMP_ML
 
-    %%A instrução JUMP M(X, 0:19), ao receber o endereço de memória (MAR) do ciclo de busca, acessa a palavra de memória correspondente que contém duas instruções. O endereço de memória presente na instrução localizada à esquerda é lido e  armazenado no contador de programa (PC). O que simboliza que a instrução indicada por esse endereço será executada no próximo ciclo, independente do conteúdo do registrador IBR ou o que estava armazenado anteriormente em PC.
+   %% A instrução JUMP M(X, 0:19), ao receber o endereço de memória (MAR) do ciclo de busca, acessa a palavra de memória que contém duas intruções e armazena esse conteúdo no MBR. O endereço de memória presente na instrução localizada à esquerda desse conteúdo é lido e armazenado no contador de programa (PC). O que indica que o conteúdo apontado por esse endereço será executado no próximo ciclo de busca, independente do conteúdo do registrador IBR ou o que estava armazenado anteriormente em PC.
 
     subgraph JUMP_ML ["JUMP M(X, 0:19)"]
-	    JUMP_MXL1("MBR ← M(MAR)")
+	JUMP_MXL1("MBR ← M(MAR)")
         JUMP_MXL2("MAR ← MBR(8:19)")
         JUMP_MXL3("PC ← MAR")
         JUMP_MXL4("Reset IBR")
@@ -99,7 +99,7 @@ subgraph "Execution Cycle"
     DECODE_A --> |"JUMP M(X, 20:39)
     (opcode: 00001110)"|JUMP_MR
 
-    %% A instrução JUMP M(X, 20:39), ao receber o endereço de memória (MAR), acessa a palavra de memória correspondente que contém duas instruções. O endereço de memória presente na instrução localizada à direita é armazenado no contador de programa (PC). O que simboliza que a instrução indicada por endereço será executada no próximo ciclo de forma irrestrita, independente do conteúdo do registrador IBR ou o que estava armazenado anteriormente em PC.
+    %% A instrução JUMP M(X, 20:39),  ao receber o endereço de memória (MAR) do ciclo de busca, acessa a palavra de memória que contém duas intruções e armazena esse conteúdo no MBR. O endereço de memória presente na instrução localizada à direita desse conteúdo é lido e armazenado no contador de programa (PC). O que indica que o conteúdo apontado por esse endereço será executado no próximo ciclo de busca, independente do conteúdo do registrador IBR ou o que estava armazenado anteriormente em PC.
 
     subgraph JUMP_MR ["JUMP M(X, 20:39)"]
         JUMP_MXR1("MBR ← M(MAR)")
