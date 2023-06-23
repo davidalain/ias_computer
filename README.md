@@ -11,6 +11,7 @@ title: Flowchart of IAS Operation
 flowchart TB
 
 %% José Otávio Gurgel Souto
+%% Fagner Timoteo da Silva
 
 subgraph "Fetch Cycle"
     START((Start)):::greenClass --> B{"Is next 
