@@ -2,7 +2,16 @@
 
 <!-- <Flowchart> -->
 
-### Fluxograma do funcionamento do Computador IAS
+## Fluxograma do funcionamento do Computador IAS
+
+#### Projeto orientado pelo professor David Alain do Nascimento na disciplina Arquitetura de Computadores
+#### Curso Tecnólogo em Análise e Desenvolvimento de Sistemas do IFPE Campus Garanhuns
+#### Diagrama desenvolvido pelos estudantes:
+
+- [José Otávio Gurgel Souto](https://github.com/OTGSJ)
+- [Fagner Timoteo da Silva](https://github.com/Othergamer1)
+- [João Pedro Bezerra Oliveira](https://github.com/yJPBO)
+
 
 ```mermaid
 ---
@@ -41,14 +50,14 @@ subgraph FC[ ]
     I --> DECODE
     G --> DECODE
     DECODE{{"Decode instruction in IR"}}:::orangeClass
-    DECODE --- link[ ]
+    %%DECODE --- link[ ]
 end
 
 style FC fill:transparent,stroke:transparent
 
     subgraph execution_cycle [Execution Cycle]
 
-        link --->|"LOAD MQ
+        DECODE --->|"LOAD MQ
         OPCODE: 00001010"| loadmq_sp
 
         subgraph loadmq_sp ["LOAD MQ"];
@@ -57,7 +66,7 @@ style FC fill:transparent,stroke:transparent
             direction TB
         end
 
-        link --->|"LOAD MQ,M(X)
+        DECODE --->|"LOAD MQ,M(X)
         OPCODE: 00001001"| loadmqmx_sp
 
         subgraph loadmqmx_sp ["LOAD MQ, M(X)"];
@@ -69,7 +78,7 @@ style FC fill:transparent,stroke:transparent
              direction TB
         end
 
-        link --->|"STOR M(X)
+        DECODE --->|"STOR M(X)
         OPCODE: 00100001"| stormx_sp
 
         subgraph stormx_sp ["STOR M(X)"];
@@ -78,7 +87,7 @@ style FC fill:transparent,stroke:transparent
              direction TB
         end
 
-        link --->|"LOAD M(X)
+        DECODE --->|"LOAD M(X)
         OPCODE: 00000001"| loadmx_sp
 
         subgraph loadmx_sp["LOAD MX"];
@@ -90,7 +99,7 @@ style FC fill:transparent,stroke:transparent
              direction TB
         end
 
-        link --->|"LOAD - M(X)
+        DECODE --->|"LOAD - M(X)
         OPCODE: 00000010"| loadminusmx_sp
 
         subgraph loadminusmx_sp ["LOAD - M(X)"];
@@ -102,7 +111,7 @@ style FC fill:transparent,stroke:transparent
              direction TB
         end
 
-        link --->|"LOAD |M(X)|
+        DECODE --->|"LOAD |M(X)|
         OPCODE: 00000011"| loadabsolutemx_sp
 
         subgraph loadabsolutemx_sp["LOAD |M(X)|"];
@@ -114,7 +123,7 @@ style FC fill:transparent,stroke:transparent
              direction TB
         end
 
-        link --->|"LOAD - |M(X)|
+        DECODE --->|"LOAD - |M(X)|
         OPCODE: 00000100"| loadminusabsolutemx_sp
 
         subgraph loadminusabsolutemx_sp["LOAD - |M(X)|"];
@@ -148,3 +157,4 @@ classDef orangeClass fill:#FF6347
 
 
 ```
+
