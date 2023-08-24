@@ -1,11 +1,10 @@
-# ias_computer
+# Fluxograma do funcionamento do Computador IAS
 
 <!-- <Flowchart> -->
 
-## Fluxograma do funcionamento do Computador IAS
-
-#### Projeto orientado pelo professor David Alain do Nascimento na disciplina Arquitetura de Computadores
-#### Curso Tecnólogo em Análise e Desenvolvimento de Sistemas do IFPE Campus Garanhuns
+#### Projeto orientado pelo professor [David Alain do Nascimento](https://github.com/davidalain) na disciplina **_Arquitetura de Computadores_**
+#### Curso Superior de Tecnologia em **_Análise e Desenvolvimento de Sistemas (ADS)_** 
+#### IFPE Campus Garanhuns
 #### Diagrama desenvolvido pelos estudantes:
 
 - [José Otávio Gurgel Souto](https://github.com/OTGSJ)
@@ -15,7 +14,7 @@
 
 ```mermaid
 ---
-title: Flowchart of IAS Operation
+title:  Fluxograma do funcionamento do Computador IAS
 ---
 flowchart TB
 
