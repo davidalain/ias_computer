@@ -83,6 +83,9 @@ style FC fill:transparent,stroke:transparent
         subgraph stormx_sp ["STOR M(X)"];
         %%Transfere o valor de AC para para M(X)
              stormx01["MBR ← AC"]
+             stormx02["M(MAR) ← MBR"]
+
+             stormx01 --> stormx02
              direction TB
         end
 
