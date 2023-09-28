@@ -20,7 +20,7 @@
 - [Wanessa Santana Ferreira](https://github.com/Wanessaa)
 
 ##### Instruções aritméticas
-- [Helton Jose Carneiro de Lima] (https://github.com/heltoncarneiro)
+- [Helton Jose Carneiro de Lima](https://github.com/heltoncarneiro)
 - [Gustavo Osório Bernardo Thompson Flores](https://github.com/gustavobtflores)
 - [Joel Rodrigues Viera](https://github.com/joelrodriguesvieira)
 - [Ian Pessôa de Miranda](https://github.com/Ian-Pessoa)
