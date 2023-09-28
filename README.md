@@ -5,7 +5,8 @@
 #### Projeto orientado pelo professor [David Alain do Nascimento](https://github.com/davidalain) na disciplina **_Arquitetura de Computadores_**
 #### Curso Superior de Tecnologia em **_Análise e Desenvolvimento de Sistemas (ADS)_** 
 #### IFPE Campus Garanhuns
-#### Diagrama desenvolvido pelos estudantes:
+
+#### Diagrama desenvolvido pelos estudantes para cada tipo de instrução:
 
 ##### Instruções de transferência de dados
 - [José Otávio Gurgel Souto](https://github.com/OTGSJ)
