@@ -23,7 +23,7 @@ flowchart TB
 %% João Pedro Bezerra Oliveira
 
 subgraph "Fetch Cycle"
-    START((Start)):::greenClass --> B{"Is next 
+    START((Start)):::greenClass --> B{"Is next
     instruction 
     in IBR?"}
     B --> |"Yes
@@ -42,7 +42,8 @@ subgraph "Fetch Cycle"
     E --> |Yes| G("IBR ← MBR(20:39)
     IR ← MBR(0:7)
     MAR ← MBR(8:19)")
-    H --> I("PC ← PC + 1")
+    H --> I("PC ← PC + 1
+    Clear IBR")
 end
 
 subgraph FC[ ]
@@ -57,7 +58,7 @@ style FC fill:transparent,stroke:transparent
     subgraph execution_cycle [Execution Cycle]
 
         DECODE --->|"LOAD MQ
-        OPCODE: 00001010"| loadmq_sp
+        Opcode: 00001010"| loadmq_sp
 
         subgraph loadmq_sp ["LOAD MQ"];
         %%Transfere o valor de MQ para AC
@@ -66,9 +67,9 @@ style FC fill:transparent,stroke:transparent
         end
 
         DECODE --->|"LOAD MQ,M(X)
-        OPCODE: 00001001"| loadmqmx_sp
+        Opcode: 00001001"| loadmqmx_sp
 
-        subgraph loadmqmx_sp ["LOAD MQ, M(X)"];
+        subgraph loadmqmx_sp ["LOAD MQ,M(X)"];
         %%Transfere o valor de M(X) para MQ
              loadmqmx01["MBR ← M(MAR)"]
              loadmqmx02["MQ ← MBR"]
@@ -78,7 +79,7 @@ style FC fill:transparent,stroke:transparent
         end
 
         DECODE --->|"STOR M(X)
-        OPCODE: 00100001"| stormx_sp
+        Opcode: 00100001"| stormx_sp
 
         subgraph stormx_sp ["STOR M(X)"];
         %%Transfere o valor de AC para para M(X)
@@ -90,7 +91,7 @@ style FC fill:transparent,stroke:transparent
         end
 
         DECODE --->|"LOAD M(X)
-        OPCODE: 00000001"| loadmx_sp
+        Opcode: 00000001"| loadmx_sp
 
         subgraph loadmx_sp["LOAD MX"];
         %%Transfere o valor de M(X) para AC
@@ -101,12 +102,12 @@ style FC fill:transparent,stroke:transparent
              direction TB
         end
 
-        DECODE --->|"LOAD - M(X)
-        OPCODE: 00000010"| loadminusmx_sp
+        DECODE --->|"LOAD -M(X)
+        Opcode: 00000010"| loadminusmx_sp
 
-        subgraph loadminusmx_sp ["LOAD - M(X)"];
+        subgraph loadminusmx_sp ["LOAD -M(X)"];
         %%Transfere o valor negativo de M(X) para AC 
-             loadminusmx01["MBR ← - M(MAR)"]
+             loadminusmx01["MBR ← -M(MAR)"]
              loadminusmx02["AC ← MBR"]
 
              loadminusmx01 --> loadminusmx02
@@ -114,7 +115,7 @@ style FC fill:transparent,stroke:transparent
         end
 
         DECODE --->|"LOAD |M(X)|
-        OPCODE: 00000011"| loadabsolutemx_sp
+        Opcode: 00000011"| loadabsolutemx_sp
 
         subgraph loadabsolutemx_sp["LOAD |M(X)|"];
         %%Transfere o valor absoluto de M(X) para AC
@@ -126,11 +127,11 @@ style FC fill:transparent,stroke:transparent
         end
 
         DECODE --->|"LOAD - |M(X)|
-        OPCODE: 00000100"| loadminusabsolutemx_sp
+        Opcode: 00000100"| loadminusabsolutemx_sp
 
-        subgraph loadminusabsolutemx_sp["LOAD - |M(X)|"];
+        subgraph loadminusabsolutemx_sp["LOAD -|M(X)|"];
         %%Transfere o valor absoluto negativo de M(X) para AC
-             loadminusabsolutemx01["MBR ← - |M(MAR)|"]
+             loadminusabsolutemx01["MBR ← -|M(MAR)|"]
              loadminusabsolutemx02["AC ← MBR"]
 
              loadminusabsolutemx01 --> loadminusabsolutemx02
