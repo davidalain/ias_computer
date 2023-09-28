@@ -29,7 +29,7 @@
 
 ```mermaid
 ---
-title:  Fluxograma do funcionamento do Computador IAS
+title:  Fluxograma do funcionamento do Computador IAS (https://github.com/davidalain/ias_computer)
 ---
 flowchart TB
 
