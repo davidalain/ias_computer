@@ -19,6 +19,13 @@
 - [Laura Maria Farias Silva](https://github.com/laura-farias-dev)
 - [Wanessa Santana Ferreira](https://github.com/Wanessaa)
 
+##### Instruções aritméticas
+- [Helton Jose Carneiro de Lima] (https://github.com/heltoncarneiro)
+- [Gustavo Osório Bernardo Thompson Flores](https://github.com/gustavobtflores)
+- [Joel Rodrigues Viera](https://github.com/joelrodriguesvieira)
+- [Ian Pessôa de Miranda](https://github.com/Ian-Pessoa)
+- [Enzo Albuquerque Gois](https://github.com/enzo-gois)
+
 ```mermaid
 ---
 title:  Fluxograma do funcionamento do Computador IAS
@@ -190,7 +197,7 @@ subgraph _execution_cycle_ [Execution Cycle]
     DECODE --> |"JUMP M(X, 0:19)
     Opcode: 00001101"|JUMP_ML
 
-   %% A instrução JUMP M(X, 0:19), ao receber o endereço de memória (MAR) do ciclo de busca, acessa a palavra de memória que contém duas intruções e armazena esse conteúdo no MBR. O endereço de memória presente na instrução localizada à esquerda desse conteúdo é lido e armazenado no contador de programa (PC). O que indica que o conteúdo apontado por esse endereço será executado no próximo ciclo de busca, independente do conteúdo do registrador IBR ou o que estava armazenado anteriormente em PC.
+	%% A instrução JUMP M(X, 0:19), ao receber o endereço de memória (MAR) do ciclo de busca, acessa a palavra de memória que contém duas intruções e armazena esse conteúdo no MBR. O endereço de memória presente na instrução localizada à esquerda desse conteúdo é lido e armazenado no contador de programa (PC). O que indica que o conteúdo apontado por esse endereço será executado no próximo ciclo de busca, independente do conteúdo do registrador IBR ou o que estava armazenado anteriormente em PC.
 
     subgraph JUMP_ML ["JUMP M(X, 0:19)"]
 	    JUMP_MXL1("MBR ← M(MAR)")
@@ -263,11 +270,115 @@ subgraph _execution_cycle_ [Execution Cycle]
         JUMP1_MXR2 -->  JUMP1_MXR3
         JUMP1_MXR3 -->  JUMP1_MXR4
         JUMP1_MXR4 -->  JUMP1_MXR5
-
         direction TB
     end
 
 
+	%%%% Instruções aritméticas
+	%% [Helton Jose Carneiro de Lima] (https://github.com/heltoncarneiro)
+	%% [Gustavo Osório Bernardo Thompson Flores](https://github.com/gustavobtflores)
+	%% [Joel Rodrigues Viera](https://github.com/joelrodriguesvieira)
+	%% [Ian Pessôa de Miranda](https://github.com/Ian-Pessoa)
+	%% [Enzo Albuquerque Gois](https://github.com/enzo-gois)
+	
+	DECODE --> |"ADD M(X)
+    Opcode: 00000101"| ADD_MX
+    subgraph ADD_MX ["ADD M(X)"]
+        %% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
+        ADD_MX__A("MBR ← M(MAR)")
+        %% O conteúdo do MBR é adicionado ao AC, com o resultado sendo armazenado novamente no AC %%
+        ADD_MX__B("AC ← AC + MBR")
+
+        ADD_MX__A ---> ADD_MX__B
+        direction TB
+    end
+
+    DECODE ---> |"ADD M(X)
+    Opcode: 00000111"|ADD_MX2
+    subgraph ADD_MX2 ["ADD |M(X)|"]
+        %% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
+        ADD_MX2__A("MBR ← M(MAR)")
+        %% O bit mais significativo do MBR é setado como 0
+        ADD_MX2__B("MBR[0] ← 0")
+        %% O conteúdo do MBR é adicionado ao AC, com o resultado sendo armazenado novamente no AC %%
+        ADD_MX2__C("AC ← AC + MBR")
+
+        ADD_MX2__A --> ADD_MX2__B
+        ADD_MX2__B --> ADD_MX2__C
+        direction TB        
+    end
+
+    DECODE --> |"SUB M(X)
+    Opcode: 00000110"|SUB_MX
+    subgraph SUB_MX ["SUB M(X)"]
+	    %% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
+        SUB_MX__A("MBR ← M(MAR)")
+	    %% O conteúdo do MBR é subtraido do AC, com o resultado sendo armazenado novamente no AC %%
+        SUB_MX__B("AC ← AC - MBR")
+
+        SUB_MX__A ---> SUB_MX__B
+        direction TB
+    end
+
+    DECODE --> |"SUB |M(X)|
+    Opcode: 00001000"|SUB_MX2
+    subgraph SUB_MX2 ["SUB |M(X)|"]
+	    %% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
+        SUB_MX2__A("MBR ← M(MAR)")
+	    %% O bit mais significativo do MBR é setado como 0
+        SUB_MX2__B("MBR[0] ← 0")
+	    %% O conteúdo do MBR é subtraido do AC, com o resultado sendo armazenado novamente no AC %%
+        SUB_MX2__C("AC ← AC - MBR")
+
+        SUB_MX2__A --> SUB_MX2__B
+        SUB_MX2__B --> SUB_MX2__C
+        direction TB
+    end
+
+
+    DECODE --> |"MUL M(X)
+    Opcode: 00001011"|MUL_MX
+    subgraph MUL_MX ["MUL M(X)"]
+	    %% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
+    	MUL_MX_A("MBR ← M(MAR)")
+	    %% O conteúdo do MQ é multiplicado com MBR, resultando em um número binario de 80 bits [0:79]%%
+	    %% A parte mais significativa [0:39] é armazenada em AC%%
+	    %% A parte menos significativa [40:79] é armazenada em MQ%%
+    	MUL_MX_B("AC ← (MQ * MBR)[0:39]
+    	MQ ← (MQ * MBR)[40:79]")
+    	MUL_MX_A ---> MUL_MX_B
+        direction TB
+    end
+
+    DECODE ---> |"DIV M(X)
+    Opcode: 00001100"|DIV_MX
+    subgraph DIV_MX ["DIV M(X)"]
+	    %% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
+    	DIV_MX_A("MBR ← M(MAR)")
+	    %% O conteúdo do MQ é dividido com MBR%%
+	    %% O quociente é armazendo em MQ%%
+	    %% O resto é armazenado em AC%%
+    	DIV_MX_B("MQ ← AC/MBR
+    	AC ← AC%MBR")
+
+        DIV_MX_A ---> DIV_MX_B
+        direction TB
+    end
+
+    DECODE --> |"LSH
+    Opcode: 00010100"|LSH_A
+    subgraph LSH_A ["LSH"]
+	    %% O conteúdo de AC é deslocado 1 bit para a esquerda e armazenado em AC%%
+        LSH("AC ← AC << 1")
+    end
+
+    DECODE --> |"RSH
+    Opcode: 00010101"|RSH_A
+    subgraph RSH_A ["RSH"]
+	    %% O conteúdo de AC é deslocado 1 bit para a direita e armazenado em AC%%
+        RSH("AC ← AC >> 1")
+    end
+	
 end
 
 subgraph _end_ [End]
@@ -291,6 +402,15 @@ subgraph _end_ [End]
     JUMP+_ML --- END
     JUMP+_MR --- END
 
+	ADD_MX --- END
+	ADD_MX2 --- END
+	SUB_MX --- END
+	SUB_MX2 --- END
+	MUL_MX --- END
+	DIV_MX --- END
+	LSH_A --- END
+	RSH_A --- END
+	
     direction TB
 end
 
