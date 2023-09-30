@@ -5,7 +5,8 @@
 #### Projeto orientado pelo professor [David Alain do Nascimento](https://github.com/davidalain) na disciplina **_Arquitetura de Computadores_**
 #### Curso Superior de Tecnologia em **_Análise e Desenvolvimento de Sistemas (ADS)_** 
 #### IFPE Campus Garanhuns
-#### Diagrama desenvolvido pelos estudantes:
+
+#### Diagrama desenvolvido pelos estudantes para cada tipo de instrução:
 
 ##### Instruções de transferência de dados
 - [José Otávio Gurgel Souto](https://github.com/OTGSJ)
@@ -20,7 +21,7 @@
 - [Wanessa Santana Ferreira](https://github.com/Wanessaa)
 
 ##### Instruções aritméticas
-- [Helton Jose Carneiro de Lima] (https://github.com/heltoncarneiro)
+- [Helton Jose Carneiro de Lima](https://github.com/heltoncarneiro)
 - [Gustavo Osório Bernardo Thompson Flores](https://github.com/gustavobtflores)
 - [Joel Rodrigues Viera](https://github.com/joelrodriguesvieira)
 - [Ian Pessôa de Miranda](https://github.com/Ian-Pessoa)
@@ -28,7 +29,7 @@
 
 ```mermaid
 ---
-title:  Fluxograma do funcionamento do Computador IAS
+title:  Fluxograma do funcionamento do Computador IAS (https://github.com/davidalain/ias_computer)
 ---
 flowchart TB
 
