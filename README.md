@@ -202,13 +202,10 @@ subgraph _execution_cycle_ [Execution Cycle]
 
     subgraph JUMP_ML ["JUMP M(X, 0:19)"]
 	    JUMP_MXL1("MBR ← M(MAR)")
-        JUMP_MXL2("MAR ← MBR(8:19)")
-        JUMP_MXL3("PC ← MAR")
-        JUMP_MXL4("Reset IBR")
+        JUMP_MXL2("IBR ← MBR(0:19)")
 
         JUMP_MXL1 --> JUMP_MXL2
-        JUMP_MXL2 --> JUMP_MXL3
-        JUMP_MXL3 --> JUMP_MXL4
+
         direction TB
     end
 
@@ -220,13 +217,9 @@ subgraph _execution_cycle_ [Execution Cycle]
 
     subgraph JUMP_MR ["JUMP M(X, 20:39)"]
         JUMP_MXR1("MBR ← M(MAR)")
-        JUMP_MXR2("MAR ← MBR(28:39)")
-        JUMP_MXR3("PC ← MAR")
-        JUMP_MXR4("Reset IBR")
+        JUMP_MXR2("IBR ← MBR(20:39)")
 
         JUMP_MXR1 --> JUMP_MXR2
-        JUMP_MXR2 --> JUMP_MXR3
-        JUMP_MXR3 --> JUMP_MXR4
         direction TB
     end
 
@@ -239,16 +232,12 @@ subgraph _execution_cycle_ [Execution Cycle]
     subgraph JUMP+_ML ["JUMP+ M(X, 0:19)"]
         JUMP1_MXL1{"AC >= 0"}
         JUMP1_MXL2("MBR ← M(MAR)")
-        JUMP1_MXL3("MAR ← MBR(8:19)")
-        JUMP1_MXL4("PC ← MAR")
-        JUMP1_MXL5("Reset IBR")
+        JUMP1_MXL3("IBR ← MBR(0:19)")
         DO_NOTHING_L("Do nothing")
        
         JUMP1_MXL1 --> |Yes| JUMP1_MXL2
         JUMP1_MXL1 --> |No| DO_NOTHING_L
         JUMP1_MXL2 -->  JUMP1_MXL3
-        JUMP1_MXL3 -->  JUMP1_MXL4
-        JUMP1_MXL4 -->  JUMP1_MXL5
         direction TB
     end
 
@@ -261,16 +250,12 @@ subgraph _execution_cycle_ [Execution Cycle]
     subgraph JUMP+_MR ["JUMP+ M(X, 20:39)"]
         JUMP1_MXR1{"AC >= 0"}
         JUMP1_MXR2("MBR ← M(MAR)")
-        JUMP1_MXR3("MAR ← MBR(28:39)")
-        JUMP1_MXR4("PC ← MAR")
-        JUMP1_MXR5("Reset IBR")
+        JUMP1_MXR3("IBR ← MBR(20:39)")
         DO_NOTHING_R("Do nothing")
 
         JUMP1_MXR1 --> |Yes| JUMP1_MXR2
         JUMP1_MXR1 --> |No| DO_NOTHING_R
         JUMP1_MXR2 -->  JUMP1_MXR3
-        JUMP1_MXR3 -->  JUMP1_MXR4
-        JUMP1_MXR4 -->  JUMP1_MXR5
         direction TB
     end
 
@@ -417,7 +402,6 @@ end
 
 classDef greenClass fill:#008000
 classDef orangeClass fill:#FF6347
-
 ```
 
 
