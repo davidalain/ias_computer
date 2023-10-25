@@ -1,0 +1,10 @@
+
+Executar no PowerShell na pasta que contém os arquivos .mmd
+
+mmdc -i flowchart_instrucoes_artimeticas.mmd -o flowchart_instrucoes_artimeticas.pdf -f
+mmdc -i flowchart_instrucoes_desvios_e_modificacao_endereco.mmd -o flowchart_instrucoes_desvios_e_modificacao_endereco.pdf -f
+mmdc -i flowchart_instrucoes_transferencia_de_dados.mmd -o flowchart_instrucoes_transferencia_de_dados.pdf -f
+mmdc -i flowchart_todas_instrucoes.mmd -o flowchart_todas_instrucoes.pdf -f
+
+
+Mais informações: https://github.com/mermaid-js/mermaid-cli
