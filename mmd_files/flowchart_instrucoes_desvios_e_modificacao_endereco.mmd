@@ -85,8 +85,8 @@ subgraph _execution_cycle_ [Execution Cycle]
 	%% A instrução JUMP M(X, 0:19), ao receber o endereço de memória (MAR) do ciclo de busca, acessa a palavra de memória que contém duas intruções e armazena esse conteúdo no MBR. O endereço de memória presente na instrução localizada à esquerda desse conteúdo é lido e armazenado no contador de programa (PC). O que indica que o conteúdo apontado por esse endereço será executado no próximo ciclo de busca, independente do conteúdo do registrador IBR ou o que estava armazenado anteriormente em PC.
 
     subgraph JUMP_ML ["JUMP M(X, 0:19)"]
-	    JUMP_MXL1("MBR ← M(MAR)")
-        JUMP_MXL2("IBR ← MBR(0:19)")
+        JUMP_MXL1("PC ← MAR")
+	    JUMP_MXL2("MBR ← M(MAR)")
 
         JUMP_MXL1 --> JUMP_MXL2
 
@@ -100,8 +100,8 @@ subgraph _execution_cycle_ [Execution Cycle]
     %% A instrução JUMP M(X, 20:39),  ao receber o endereço de memória (MAR) do ciclo de busca, acessa a palavra de memória que contém duas intruções e armazena esse conteúdo no MBR. O endereço de memória presente na instrução localizada à direita desse conteúdo é lido e armazenado no contador de programa (PC). O que indica que o conteúdo apontado por esse endereço será executado no próximo ciclo de busca, independente do conteúdo do registrador IBR ou o que estava armazenado anteriormente em PC.
 
     subgraph JUMP_MR ["JUMP M(X, 20:39)"]
-        JUMP_MXR1("MBR ← M(MAR)")
-        JUMP_MXR2("IBR ← MBR(20:39)")
+        JUMP_MXR1("PC ← MAR")
+        JUMP_MXR2("MBR ← M(MAR)")
 
         JUMP_MXR1 --> JUMP_MXR2
         direction TB
@@ -115,8 +115,8 @@ subgraph _execution_cycle_ [Execution Cycle]
 
     subgraph JUMP+_ML ["JUMP+ M(X, 0:19)"]
         JUMP1_MXL1{"AC >= 0"}
-        JUMP1_MXL2("MBR ← M(MAR)")
-        JUMP1_MXL3("IBR ← MBR(0:19)")
+        JUMP1_MXL2("PC ← MAR")
+        JUMP1_MXL3("MBR ← M(MAR)")
         DO_NOTHING_L("Do nothing")
        
         JUMP1_MXL1 --> |Yes| JUMP1_MXL2
@@ -133,8 +133,8 @@ subgraph _execution_cycle_ [Execution Cycle]
       
     subgraph JUMP+_MR ["JUMP+ M(X, 20:39)"]
         JUMP1_MXR1{"AC >= 0"}
-        JUMP1_MXR2("MBR ← M(MAR)")
-        JUMP1_MXR3("IBR ← MBR(20:39)")
+        JUMP1_MXR2("PC ← MAR")
+        JUMP1_MXR3("MBR ← M(MAR)")
         DO_NOTHING_R("Do nothing")
 
         JUMP1_MXR1 --> |Yes| JUMP1_MXR2
