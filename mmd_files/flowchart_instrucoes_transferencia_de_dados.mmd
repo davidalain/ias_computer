@@ -24,7 +24,7 @@ subgraph _fetch_cycle_ [Fetch Cycle]
     IR ← MBR(0:7)
     MAR ← MBR(8:19)")
     H --> I("PC ← PC + 1
-    Reset IBR")
+    IBR ← 0")
 end
 
 subgraph _decode_ [ ]
@@ -95,10 +95,12 @@ subgraph _execution_cycle_ [Execution Cycle]
 
     subgraph loadminusmx_sp ["LOAD -M(X)"];
     %%Transfere o valor negativo de M(X) para AC 
-            loadminusmx01["MBR ← -M(MAR)"]
-            loadminusmx02["AC ← MBR"]
+            loadminusmx01["MBR ← M(MAR)"]
+            loadminusmx02["MBR(0) ← MBR(0) ^ 1"]
+            loadminusmx03["AC ← MBR"]
 
             loadminusmx01 --> loadminusmx02
+            loadminusmx02 --> loadminusmx03
             direction TB
     end
 
@@ -107,10 +109,12 @@ subgraph _execution_cycle_ [Execution Cycle]
 
     subgraph loadabsolutemx_sp["LOAD |M(X)|"];
     %%Transfere o valor absoluto de M(X) para AC
-            loadabsolutemx01["MBR ← |M(MAR)|"]
-            loadabsolutemx02["AC ← MBR"]
+            loadabsolutemx01["MBR ← M(MAR)"]
+            loadabsolutemx02["MBR(0) ← 0"]
+            loadabsolutemx03["AC ← MBR"]
 
             loadabsolutemx01 --> loadabsolutemx02
+            loadabsolutemx02 --> loadabsolutemx03
             direction TB
     end
 
@@ -119,10 +123,12 @@ subgraph _execution_cycle_ [Execution Cycle]
 
     subgraph loadminusabsolutemx_sp["LOAD -|M(X)|"];
     %%Transfere o valor absoluto negativo de M(X) para AC
-            loadminusabsolutemx01["MBR ← -|M(MAR)|"]
-            loadminusabsolutemx02["AC ← MBR"]
+            loadminusabsolutemx01["MBR ← M(MAR)"]
+            loadminusabsolutemx02["MBR(0) ← 1"]
+            loadminusabsolutemx03["AC ← MBR"]
 
             loadminusabsolutemx01 --> loadminusabsolutemx02
+            loadminusabsolutemx02 --> loadminusabsolutemx03
             direction TB
     end
 	
@@ -147,3 +153,4 @@ end
 
 classDef greenClass fill:#008000
 classDef orangeClass fill:#FF6347
+classDef redFontClass color:#FF0000
