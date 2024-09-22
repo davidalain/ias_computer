@@ -1,9 +1,21 @@
 
 Executar no PowerShell na pasta que contém os arquivos .mmd
 
+# Gerar arquivos PDF
 mmdc -i flowchart_instrucoes_artimeticas.mmd -o flowchart_instrucoes_artimeticas.pdf -f
 mmdc -i flowchart_instrucoes_desvios_e_modificacao_endereco.mmd -o flowchart_instrucoes_desvios_e_modificacao_endereco.pdf -f
 mmdc -i flowchart_instrucoes_transferencia_de_dados.mmd -o flowchart_instrucoes_transferencia_de_dados.pdf -f
+
+# Gerar arquivos SVG
+mmdc -i flowchart_instrucoes_artimeticas.mmd -o flowchart_instrucoes_artimeticas.svg
+mmdc -i flowchart_instrucoes_desvios_e_modificacao_endereco.mmd -o flowchart_instrucoes_desvios_e_modificacao_endereco.svg
+mmdc -i flowchart_instrucoes_transferencia_de_dados.mmd -o flowchart_instrucoes_transferencia_de_dados.svg
+
+
+
+
+
+#
 mmdc -i flowchart_todas_instrucoes.mmd -o flowchart_todas_instrucoes.pdf -f
 
 
