@@ -37,7 +37,7 @@ jobs:
           mkdir -p public
           
           # Copia todas as páginas HTML (caminhos corrigidos)
-          cp ./mmd_files/flowchart_instrucoes_aritmeticas.html public/
+          cp ./mmd_files/flowchart_instrucoes_artimeticas.html public/
           cp ./mmd_files/flowchart_instrucoes_desvios_e_modificacao_endereco.html public/
           cp ./mmd_files/flowchart_instrucoes_transferencia_de_dados.html public/
           
