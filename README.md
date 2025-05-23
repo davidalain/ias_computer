@@ -42,3 +42,38 @@
 ### Correções também foram apontadas por:
 - [Rafael Rocha](https://github.com/NKRaff)
 - [Daniel Ferreira](https://github.com/ThePocketRocket)
+
+  Aqui está a seção adicional para o README.md explicando a pipeline e a interatividade dos diagramas:
+
+
+## Implementação Interativa e Deploy Automatizado
+
+**Por [Davi Ferreira Lima](https://github.com/daviferreiralima)**
+
+Os fluxogramas originais em Mermaid foram convertidos para versões interativas em HTML com:
+- Tooltips explicativos para cada operação
+- Visualização unificada em uma única linha
+- Navegação entre os diagramas
+
+### Pipeline de Deploy Automatizado
+
+O projeto utiliza GitHub Actions para:
+1. **Publicação automática** no GitHub Pages quando há push para a branch main
+2. **Geração de um portal central** com links para todos os diagramas
+3. **Conversão dos fluxogramas** para versões interativas
+
+Acesse a versão interativa completa em:  
+[IAS Computer - Diagramas de Fluxo Interativos](https://davidalain.github.io/ias_computer/)
+
+### Funcionamento da Interatividade
+- Passe o mouse sobre qualquer operação para ver detalhes
+- Clique em operações para manter o tooltip visível
+- Navegue entre os diagramas pelo menu principal
+- Versão mobile responsiva
+
+Os arquivos HTML estão disponíveis em:
+- `mmd_files/flowchart_instrucoes_aritmeticas.html`
+- `mmd_files/flowchart_instrucoes_desvios_e_modificacao_endereco.html` 
+- `mmd_files/flowchart_instrucoes_transferencia_de_dados.html`
+- 
+```
