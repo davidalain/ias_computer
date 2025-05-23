@@ -31,21 +31,18 @@ jobs:
 
       - name: Move HTML file to root
         run: |
-          mkdir -p docs
-          cp mmd_files/flowchart_instrucoes_artimeticas.html docs/index.html
+          mkdir -p public
+          cp mmd_files/flowchart_instrucoes_artimeticas.html public/index.html
           # Copie outros assets se necessário (CSS, JS, imagens)
-          # cp -r ias_computer/mmd_files/assets docs/
+          # cp -r ias_computer/mmd_files/assets public/
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
-        with:
-          static_site_generator: "none"
-          path: "/docs"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'docs'
+          path: 'public'
 
       - name: Deploy to GitHub Pages
         id: deployment
