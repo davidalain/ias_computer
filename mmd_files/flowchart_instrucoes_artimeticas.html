@@ -40,14 +40,14 @@
             START((Start)):::greenClass --> B{"Is next
             instruction 
             in IBR?"}
-            B --> |"Yes\n\nNo memory access\nrequired"| F("IR ← IBR(0:7)\nMAR ← IBR(8:19)")
+            B --> |"Yes No memory access required"| F("IR ← IBR(0:7)\nMAR ← IBR(8:19)")
             F --> I
             B --> |No| C("MAR ← PC")
             C --> D("MBR ← M(MAR)")
-            D --> E{"Left\ninstruction\nrequired?"}
-            E --> |No| H("IR ← MBR(20:27)\nMAR ← MBR(28:39)")
-            E --> |Yes| G("IBR ← MBR(20:39)\nIR ← MBR(0:7)\nMAR ← MBR(8:19)")
-            H --> I("PC ← PC + 1\nIBR ← 0")
+            D --> E{"Left instruction required?"}
+            E --> |No| H("IR ← MBR(20:27) MAR ← MBR(28:39)")
+            E --> |Yes| G("IBR ← MBR(20:39) IR ← MBR(0:7) MAR ← MBR(8:19)")
+            H --> I("PC ← PC + 1 IBR ← 0")
         end
 
         subgraph _decode_ [ ]
@@ -61,7 +61,7 @@
         end
 
         subgraph _execution_cycle_ [Execution Cycle]
-            DECODE --> |"ADD M(X)\nOpcode: 00000101"| ADD_MX
+            DECODE --> |"ADD M(X) Opcode: 00000101"| ADD_MX
             subgraph ADD_MX ["ADD M(X)"]
                 %% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
                 ADD_MX__A("MBR ← M(MAR)"):::clickable
@@ -72,7 +72,7 @@
                 direction TB
             end
 
-            DECODE ---> |"ADD |M(X)|\nOpcode: 00000111"|ADD_MX2
+            DECODE ---> |"ADD |M(X)| Opcode: 00000111"|ADD_MX2
             subgraph ADD_MX2 ["ADD |M(X)|"]
                 %% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
                 ADD_MX2__A("MBR ← M(MAR)"):::clickable
@@ -86,7 +86,7 @@
                 direction TB        
             end
 
-            DECODE --> |"SUB M(X)\nOpcode: 00000110"|SUB_MX
+            DECODE --> |"SUB M(X) Opcode: 00000110"|SUB_MX
             subgraph SUB_MX ["SUB M(X)"]
                 %% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
                 SUB_MX__A("MBR ← M(MAR)"):::clickable
@@ -97,7 +97,7 @@
                 direction TB
             end
 
-            DECODE --> |"SUB |M(X)|\nOpcode: 00001000"|SUB_MX2
+            DECODE --> |"SUB |M(X)| Opcode: 00001000"|SUB_MX2
             subgraph SUB_MX2 ["SUB |M(X)|"]
                 %% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
                 SUB_MX2__A("MBR ← M(MAR)"):::clickable
@@ -111,38 +111,38 @@
                 direction TB
             end
 
-            DECODE --> |"MUL M(X)\nOpcode: 00001011"|MUL_MX
+            DECODE --> |"MUL M(X) Opcode: 00001011"|MUL_MX
             subgraph MUL_MX ["MUL M(X)"]
                 %% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
                 MUL_MX_A("MBR ← M(MAR)"):::clickable
                 %% O conteúdo do MQ é multiplicado com MBR, resultando em um número binario de 80 bits [0:79]%%
                 %% A parte mais significativa [0:39] é armazenada em AC%%
                 %% A parte menos significativa [40:79] é armazenada em MQ%%
-                MUL_MX_B("AC ← (MQ * MBR)(0:39)\nMQ ← (MQ * MBR)(40:79)"):::clickable
+                MUL_MX_B("AC ← (MQ * MBR)(0:39) MQ ← (MQ * MBR)(40:79)"):::clickable
                 MUL_MX_A ---> MUL_MX_B
                 direction TB
             end
 
-            DECODE ---> |"DIV M(X)\nOpcode: 00001100"|DIV_MX
+            DECODE ---> |"DIV M(X) Opcode: 00001100"|DIV_MX
             subgraph DIV_MX ["DIV M(X)"]
                 %% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
                 DIV_MX_A("MBR ← M(MAR)"):::clickable
                 %% O conteúdo do MQ é dividido com MBR%%
                 %% O quociente é armazendo em MQ%%
                 %% O resto é armazenado em AC%%
-                DIV_MX_B("MQ ← AC/MBR\nAC ← AC%MBR"):::clickable
+                DIV_MX_B("MQ ← AC/MBR AC ← AC%MBR"):::clickable
 
                 DIV_MX_A ---> DIV_MX_B
                 direction TB
             end
 
-            DECODE --> |"LSH\nOpcode: 00010100"|LSH_A
+            DECODE --> |"LSH Opcode: 00010100"|LSH_A
             subgraph LSH_A ["LSH"]
                 %% O conteúdo de AC é deslocado 1 bit para a esquerda e armazenado em AC%%
                 LSH("AC ← AC << 1"):::clickable
             end
 
-            DECODE --> |"RSH\nOpcode: 00010101"|RSH_A
+            DECODE --> |"RSH Opcode: 00010101"|RSH_A
             subgraph RSH_A ["RSH"]
                 %% O conteúdo de AC é deslocado 1 bit para a direita e armazenado em AC%%
                 RSH("AC ← AC >> 1"):::clickable
@@ -152,7 +152,7 @@
         subgraph _end_ [End]
             style _end_ fill:transparent,stroke:transparent
 
-            END(("Go back\nto Start")):::greenClass
+            END(("Go back to Start")):::greenClass
 
             ADD_MX --- END
             ADD_MX2 --- END
