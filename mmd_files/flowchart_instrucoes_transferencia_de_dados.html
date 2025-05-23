@@ -1,1 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fluxograma do funcionamento do Computador IAS</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    #tooltip {
+      position: absolute;
+      padding: 10px;
+      background: #f8f9fa;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      display: none;
+      max-width: 300px;
+      z-index: 100;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    .mermaid {
+      margin: 20px auto;
+    }
+    .comment {
+      color: #666;
+      font-style: italic;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <h1>Fluxograma do funcionamento do Computador IAS</h1>
+  <div id="tooltip"></div>
+  <div class="mermaid">
+    flowchart TB
 
+    subgraph _fetch_cycle_ [Fetch Cycle]
+      START((Start)):::greenClass --> B{"Is next instruction in IBR?"}
+      B --> |"Yes, No memory access required"| F("IR ← IBR(0:7) MAR ← IBR(8:19)")
+      F --> I
+      B --> |"No"| C("MAR ← PC")
+      C --> D("MBR ← M(MAR)")
+      D --> E{"Left instruction required?"}
+      E --> |"No"| H("IR ← MBR(20:27) MAR ← MBR(28:39)")
+      E --> |"Yes"| G("IBR ← MBR(20:39) IR ← MBR(0:7) MAR ← MBR(8:19)")
+      H --> I("PC ← PC + 1 IBR ← 0")
+    end
+
+    subgraph _decode_ [ ]
+      I --> DECODE
+      G --> DECODE
+      DECODE{{"Decode instruction in IR"}}:::orangeClass
+      style _decode_ fill:transparent,stroke:transparent
+      direction TB
+    end
+
+    subgraph _end_ [End]
+      END(("Go back to Start")):::greenClass
+      direction TB
+    end
+
+    classDef greenClass fill:#008000
+    classDef orangeClass fill:#FF6347
+    classDef clickable cursor:pointer,stroke:#3366ff,stroke-width:2px
+  </div>
+
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose'
+    });
+
+    const comments = {
+      "IR ← IBR(0:7) MAR ← IBR(8:19)": "Instrução e endereço são extraídos diretamente do IBR",
+      "MAR ← PC": "O registrador de endereço recebe o valor atual do contador de programa",
+      "MBR ← M(MAR)": "Lê da memória o conteúdo do endereço em MAR e armazena no MBR",
+      "Left instruction required?": "Verifica se a instrução da esquerda no MBR é necessária",
+      "IR ← MBR(20:27) MAR ← MBR(28:39)": "Extrai a instrução da direita do MBR",
+      "IBR ← MBR(20:39) IR ← MBR(0:7) MAR ← MBR(8:19)": "Guarda a instrução da direita no IBR, extrai a da esquerda",
+      "PC ← PC + 1 IBR ← 0": "Incrementa o contador de programa e zera o IBR",
+      "Is next instruction in IBR?": "Verifica se a próxima instrução está no registrador de buffer de instruções"
+    };
+
+    document.addEventListener('DOMContentLoaded', function () {
+      setTimeout(function () {
+        const tooltip = document.getElementById('tooltip');
+
+        document.querySelectorAll('.clickable').forEach(element => {
+          const nodeText = element.textContent.trim();
+          const comment = comments[nodeText];
+
+          if (comment) {
+            element.addEventListener('click', function (e) {
+              tooltip.innerHTML = `<div class="comment">${comment}</div>`;
+              tooltip.style.display = 'block';
+              tooltip.style.left = `${e.pageX + 10}px`;
+              tooltip.style.top = `${e.pageY + 10}px`;
+
+              document.addEventListener('click', function closeTooltip(evt) {
+                if (evt.target !== element) {
+                  tooltip.style.display = 'none';
+                  document.removeEventListener('click', closeTooltip);
+                }
+              });
+
+              e.stopPropagation();
+            });
+
+            element.addEventListener('mouseenter', function (e) {
+              tooltip.innerHTML = `<div class="comment">${comment}</div>`;
+              tooltip.style.display = 'block';
+              tooltip.style.left = `${e.pageX + 10}px`;
+              tooltip.style.top = `${e.pageY + 10}px`;
+            });
+
+            element.addEventListener('mouseleave', function () {
+              tooltip.style.display = 'none';
+            });
+          }
+        });
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
