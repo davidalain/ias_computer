@@ -173,63 +173,70 @@
     </div>
 
     <script>
-        // Inicializa Mermaid
-        mermaid.initialize({
-            startOnLoad: true,
-            theme: 'default',
-            securityLevel: 'loose'
-        });
+    // Inicializa Mermaid
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'default',
+        securityLevel: 'loose'
+    });
 
-        // Mapeamento de comentários para cada elemento
-        const comments = {
-            "ADD_MX__A": "O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR",
-            "ADD_MX__B": "O conteúdo do MBR é adicionado ao AC, com o resultado sendo armazenado novamente no AC",
-            "ADD_MX2__A": "O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR",
-            "ADD_MX2__B": "O bit mais significativo do MBR é setado como 0",
-            "ADD_MX2__C": "O conteúdo do MBR é adicionado ao AC, com o resultado sendo armazenado novamente no AC",
-            "SUB_MX__A": "O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR",
-            "SUB_MX__B": "O conteúdo do MBR é subtraído do AC, com o resultado sendo armazenado novamente no AC",
-            "SUB_MX2__A": "O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR",
-            "SUB_MX2__B": "O bit mais significativo do MBR é setado como 0",
-            "SUB_MX2__C": "O conteúdo do MBR é subtraído do AC, com o resultado sendo armazenado novamente no AC",
-            "MUL_MX_A": "O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR",
-            "MUL_MX_B": "O conteúdo do MQ é multiplicado com MBR, resultando em um número binário de 80 bits [0:79]. A parte mais significativa [0:39] é armazenada em AC. A parte menos significativa [40:79] é armazenada em MQ",
-            "DIV_MX_A": "O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR",
-            "DIV_MX_B": "O conteúdo do AC é dividido por MBR. O quociente é armazenado em MQ e o resto é armazenado em AC",
-            "LSH": "O conteúdo de AC é deslocado 1 bit para a esquerda e armazenado em AC",
-            "RSH": "O conteúdo de AC é deslocado 1 bit para a direita e armazenado em AC"
-        };
+    // Mapeamento de comentários usando os textos dos nós como chave
+    const comments = {
+        "MBR ← M(MAR)": "O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR",
+        "AC ← AC + MBR": "O conteúdo do MBR é adicionado ao AC, com o resultado sendo armazenado novamente no AC",
+        "MBR(0) ← 0": "O bit mais significativo do MBR é setado como 0",
+        "AC ← AC - MBR": "O conteúdo do MBR é subtraído do AC, com o resultado sendo armazenado novamente no AC",
+        "AC ← (MQ * MBR)(0:39)\nMQ ← (MQ * MBR)(40:79)": "O conteúdo do MQ é multiplicado com MBR, resultando em um número binário de 80 bits [0:79]. A parte mais significativa [0:39] é armazenada em AC. A parte menos significativa [40:79] é armazenada em MQ",
+        "MQ ← AC/MBR\nAC ← AC%MBR": "O conteúdo do AC é dividido por MBR. O quociente é armazenado em MQ e o resto é armazenado em AC",
+        "AC ← AC << 1": "O conteúdo de AC é deslocado 1 bit para a esquerda e armazenado em AC",
+        "AC ← AC >> 1": "O conteúdo de AC é deslocado 1 bit para a direita e armazenado em AC"
+    };
 
-        // Configura tooltips após o carregamento do Mermaid
-        document.addEventListener('DOMContentLoaded', function() {
-            // Aguarda a renderização do Mermaid
-            setTimeout(function() {
-                const tooltip = document.getElementById('tooltip');
+    // Configura tooltips após o carregamento do Mermaid
+    document.addEventListener('DOMContentLoaded', function() {
+        // Aguarda a renderização do Mermaid
+        setTimeout(function() {
+            const tooltip = document.getElementById('tooltip');
+            
+            // Adiciona eventos a todos os elementos com a classe 'clickable'
+            document.querySelectorAll('.clickable').forEach(element => {
+                // Pega o texto do nó (que é a chave no nosso objeto comments)
+                const nodeText = element.textContent.trim();
+                const comment = comments[nodeText];
                 
-                // Adiciona eventos de clique a todos os elementos com a classe 'clickable'
-                document.querySelectorAll('.clickable').forEach(element => {
-                    const nodeId = element.getAttribute('data-node-id');
-                    
+                if (comment) {
                     element.addEventListener('click', function(e) {
-                        const comment = comments[nodeId];
-                        if (comment) {
-                            tooltip.innerHTML = `<div class="comment">${comment}</div>`;
-                            tooltip.style.display = 'block';
-                            tooltip.style.left = `${e.pageX + 10}px`;
-                            tooltip.style.top = `${e.pageY + 10}px`;
-                            
-                            // Fecha o tooltip ao clicar em qualquer lugar
-                            document.addEventListener('click', function closeTooltip(evt) {
-                                if (evt.target !== element) {
-                                    tooltip.style.display = 'none';
-                                    document.removeEventListener('click', closeTooltip);
-                                }
-                            });
-                        }
+                        tooltip.innerHTML = `<div class="comment">${comment}</div>`;
+                        tooltip.style.display = 'block';
+                        tooltip.style.left = `${e.pageX + 10}px`;
+                        tooltip.style.top = `${e.pageY + 10}px`;
+                        
+                        // Fecha o tooltip ao clicar em qualquer lugar
+                        document.addEventListener('click', function closeTooltip(evt) {
+                            if (evt.target !== element) {
+                                tooltip.style.display = 'none';
+                                document.removeEventListener('click', closeTooltip);
+                            }
+                        });
+                        
+                        e.stopPropagation(); // Evita que o evento se propague
                     });
-                });
-            }, 1000); // Tempo para garantir que o Mermaid foi renderizado
-        });
-    </script>
+                    
+                    // Melhoria: tooltip no hover também
+                    element.addEventListener('mouseenter', function(e) {
+                        tooltip.innerHTML = `<div class="comment">${comment}</div>`;
+                        tooltip.style.display = 'block';
+                        tooltip.style.left = `${e.pageX + 10}px`;
+                        tooltip.style.top = `${e.pageY + 10}px`;
+                    });
+                    
+                    element.addEventListener('mouseleave', function() {
+                        tooltip.style.display = 'none';
+                    });
+                }
+            });
+        }, 1000);
+    });
+</script>
 </body>
 </html>
