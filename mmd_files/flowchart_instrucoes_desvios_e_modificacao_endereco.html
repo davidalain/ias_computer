@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Fluxograma do funcionamento do Computador IAS</title>
+    <title>Fluxograma do funcionamento do Computador IAS - Instruções de modificação de Endereço</title>
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <style>
         body {
@@ -31,11 +31,9 @@
     </style>
 </head>
 <body>
-    <h1>Fluxograma do funcionamento do Computador IAS</h1>
+    <h1>Fluxograma do funcionamento do Computador IAS - Instruções de Endereço</h1>
     <div id="tooltip"></div>
-
     <div class="mermaid">
-        %% title: Fluxograma do funcionamento do Computador IAS (https://github.com/davidalain/ias_computer)
         flowchart TB
 
         subgraph _fetch_cycle_ [Fetch Cycle]
@@ -59,80 +57,72 @@
         end
 
         subgraph _execution_cycle_ [Execution Cycle]
-            DECODE --> |"ADD M(X) Opcode: 00000101"| ADD_MX
-            subgraph ADD_MX ["ADD M(X)"]
-                ADD_MX__A("MBR ← M(MAR)"):::clickable
-                ADD_MX__B("AC ← AC + MBR"):::clickable
-                ADD_MX__A ---> ADD_MX__B
+            DECODE --> |"STOR M(X, 8:19) Opcode: 00010010"| STOR_MXL
+            subgraph STOR_MXL ["STOR M(X, 8:19)"]
+                STOR_MXL1("MBR ← M(MAR)"):::clickable
+                STOR_MXL2("MBR(8:19) ← AC(28:39)"):::clickable
+                STOR_MXL3("M(MAR) ← MBR"):::clickable
+                STOR_MXL1 --> STOR_MXL2 --> STOR_MXL3
                 direction TB
             end
 
-            DECODE ---> |"ADD |M(X)| Opcode: 00000111"|ADD_MX2
-            subgraph ADD_MX2 ["ADD |M(X)|"]
-                ADD_MX2__A("MBR ← M(MAR)"):::clickable
-                ADD_MX2__B("MBR(0) ← 0"):::clickable
-                ADD_MX2__C("AC ← AC + MBR"):::clickable
-                ADD_MX2__A --> ADD_MX2__B
-                ADD_MX2__B --> ADD_MX2__C
-                direction TB        
-            end
-
-            DECODE --> |"SUB M(X) Opcode: 00000110"|SUB_MX
-            subgraph SUB_MX ["SUB M(X)"]
-                SUB_MX__A("MBR ← M(MAR)"):::clickable
-                SUB_MX__B("AC ← AC - MBR"):::clickable
-                SUB_MX__A ---> SUB_MX__B
+            DECODE --> |"STOR M(X, 28:39) Opcode: 00010011"| STOR_MXR
+            subgraph STOR_MXR ["STOR M(X, 28:39)"]
+                STOR_MXR1("MBR ← M(MAR)"):::clickable
+                STOR_MXR2("MBR(28:39) ← AC(28:39)"):::clickable
+                STOR_MXR3("M(MAR) ← MBR"):::clickable
+                STOR_MXR1 --> STOR_MXR2 --> STOR_MXR3
                 direction TB
             end
 
-            DECODE --> |"SUB |M(X)| Opcode: 00001000"|SUB_MX2
-            subgraph SUB_MX2 ["SUB |M(X)|"]
-                SUB_MX2__A("MBR ← M(MAR)"):::clickable
-                SUB_MX2__B("MBR(0) ← 0"):::clickable
-                SUB_MX2__C("AC ← AC - MBR"):::clickable
-                SUB_MX2__A --> SUB_MX2__B
-                SUB_MX2__B --> SUB_MX2__C
+            DECODE --> |"JUMP M(X, 0:19) Opcode: 00001101"| JUMP_ML
+            subgraph JUMP_ML ["JUMP M(X, 0:19)"]
+                JUMP_MXL1("PC ← MAR IBR ← 0"):::clickable
+                JUMP_MXL2("Left instruction required: YES"):::clickable
+                JUMP_MXL1 --> JUMP_MXL2
                 direction TB
             end
 
-            DECODE --> |"MUL M(X) Opcode: 00001011"|MUL_MX
-            subgraph MUL_MX ["MUL M(X)"]
-                MUL_MX_A("MBR ← M(MAR)"):::clickable
-                MUL_MX_B("AC ← (MQ * MBR)(0:39) MQ ← (MQ * MBR)(40:79)"):::clickable
-                MUL_MX_A ---> MUL_MX_B
+            DECODE --> |"JUMP M(X, 20:39) Opcode: 00001110"| JUMP_MR
+            subgraph JUMP_MR ["JUMP M(X, 20:39)"]
+                JUMP_MXR1("PC ← MAR IBR ← 0"):::clickable
+                JUMP_MXR2("Left instruction required: NO"):::clickable
+                JUMP_MXR1 --> JUMP_MXR2
                 direction TB
             end
 
-            DECODE ---> |"DIV M(X) Opcode: 00001100"|DIV_MX
-            subgraph DIV_MX ["DIV M(X)"]
-                DIV_MX_A("MBR ← M(MAR)"):::clickable
-                DIV_MX_B("MQ ← AC/MBR AC ← AC%MBR"):::clickable
-                DIV_MX_A ---> DIV_MX_B
+            DECODE --> |"JUMP+ M(X, 0:19) Opcode: 00001111"| JUMP+_ML
+            subgraph JUMP+_ML ["JUMP+ M(X, 0:19)"]
+                JUMP1_MXL1{"AC >= 0"}:::clickable
+                JUMP1_MXL2("PC ← MAR IBR ← 0"):::clickable
+                JUMP1_MXL3("Left instruction required: YES"):::clickable
+                DO_NOTHING_L("Do nothing"):::clickable
+                JUMP1_MXL1 --> |Yes| JUMP1_MXL2 --> JUMP1_MXL3
+                JUMP1_MXL1 --> |No| DO_NOTHING_L
                 direction TB
             end
 
-            DECODE --> |"LSH Opcode: 00010100"|LSH_A
-            subgraph LSH_A ["LSH"]
-                LSH("AC ← AC << 1"):::clickable
-            end
-
-            DECODE --> |"RSH Opcode: 00010101"|RSH_A
-            subgraph RSH_A ["RSH"]
-                RSH("AC ← AC >> 1"):::clickable
+            DECODE --> |"JUMP+ M(X, 20:39) Opcode: 00010000"| JUMP+_MR
+            subgraph JUMP+_MR ["JUMP+ M(X, 20:39)"]
+                JUMP1_MXR1{"AC >= 0"}:::clickable
+                JUMP1_MXR2("PC ← MAR IBR ← 0"):::clickable
+                JUMP1_MXR3("Left instruction required: NO"):::clickable
+                DO_NOTHING_R("Do nothing"):::clickable
+                JUMP1_MXR1 --> |Yes| JUMP1_MXR2 --> JUMP1_MXR3
+                JUMP1_MXR1 --> |No| DO_NOTHING_R
+                direction TB
             end
         end
 
         subgraph _end_ [End]
             style _end_ fill:transparent,stroke:transparent
             END(("Go back to Start")):::greenClass
-            ADD_MX --- END
-            ADD_MX2 --- END
-            SUB_MX --- END
-            SUB_MX2 --- END
-            MUL_MX --- END
-            DIV_MX --- END
-            LSH_A --- END
-            RSH_A --- END
+            STOR_MXL --- END
+            STOR_MXR --- END
+            JUMP_ML --- END
+            JUMP_MR --- END
+            JUMP+_ML --- END
+            JUMP+_MR --- END
             direction TB
         end
 
@@ -143,54 +133,64 @@
     </div>
 
     <script>
+    // Inicializa Mermaid
     mermaid.initialize({
         startOnLoad: true,
         theme: 'default',
         securityLevel: 'loose'
     });
 
+    // Mapeamento de comentários
     const comments = {
         "MBR ← M(MAR)": "O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR",
-        "AC ← AC + MBR": "O conteúdo do MBR é adicionado ao AC, com o resultado sendo armazenado novamente no AC",
-        "MBR(0) ← 0": "O bit mais significativo do MBR é setado como 0",
-        "AC ← AC - MBR": "O conteúdo do MBR é subtraído do AC, com o resultado sendo armazenado novamente no AC",
-        "AC ← (MQ * MBR)(0:39) MQ ← (MQ * MBR)(40:79)": "O conteúdo do MQ é multiplicado com MBR, resultando em um número binário de 80 bits [0:79]. A parte mais significativa [0:39] é armazenada em AC. A parte menos significativa [40:79] é armazenada em MQ",
-        "MQ ← AC/MBR AC ← AC%MBR": "O conteúdo do AC é dividido por MBR. O quociente é armazenado em MQ e o resto é armazenado em AC",
-        "AC ← AC << 1": "O conteúdo de AC é deslocado 1 bit para a esquerda e armazenado em AC",
-        "AC ← AC >> 1": "O conteúdo de AC é deslocado 1 bit para a direita e armazenado em AC",
+        "MBR(8:19) ← AC(28:39)": "Os bits 8-19 do MBR são substituídos pelos bits 28-39 do AC",
+        "M(MAR) ← MBR": "O conteúdo do MBR é escrito na memória no endereço indicado pelo MAR",
+        "MBR(28:39) ← AC(28:39)": "Os bits 28-39 do MBR são substituídos pelos bits 28-39 do AC",
+        "PC ← MAR IBR ← 0": "O contador de programa recebe o valor do MAR e o IBR é zerado",
+        "Left instruction required: YES": "Indica que a próxima instrução a ser executada está na parte esquerda da palavra de memória",
+        "Left instruction required: NO": "Indica que a próxima instrução a ser executada está na parte direita da palavra de memória",
+        "AC >= 0": "Verifica se o valor no acumulador (AC) é não negativo (maior ou igual a zero)",
+        "Do nothing": "Não realiza nenhuma operação, continua o fluxo normal de execução",
+        "Is next instruction in IBR?": "Verifica se a próxima instrução está disponível no Instruction Buffer Register (IBR)",
+        "Yes No memory access required": "Quando a instrução está no IBR, não é necessário acessar a memória principal",
         "Left instruction required?": "Verifica se a instrução à esquerda no MBR é necessária",
         "IR ← IBR(0:7) MAR ← IBR(8:19)": "O registrador de instrução (IR) recebe os bits 0-7 do IBR e o registrador de endereço de memória (MAR) recebe os bits 8-19",
-        "PC ← PC + 1 IBR ← 0": "O contador de programa é incrementado e o registrador de buffer de instrução é zerado",
-        "Is next instruction in IBR?": "Verifica se a próxima instrução está disponível no Instruction Buffer Register (IBR)",
-        "Yes No memory access required": "Quando a instrução está no IBR, não é necessário acessar a memória principal"
+        "PC ← PC + 1 IBR ← 0": "O contador de programa é incrementado e o registrador de buffer de instrução é zerado"
     };
 
+    // Configura tooltips
     document.addEventListener('DOMContentLoaded', function() {
         setTimeout(function() {
             const tooltip = document.getElementById('tooltip');
+            
             document.querySelectorAll('.clickable').forEach(element => {
                 const nodeText = element.textContent.trim();
                 const comment = comments[nodeText];
+                
                 if (comment) {
                     element.addEventListener('click', function(e) {
                         tooltip.innerHTML = `<div class="comment">${comment}</div>`;
                         tooltip.style.display = 'block';
                         tooltip.style.left = `${e.pageX + 10}px`;
                         tooltip.style.top = `${e.pageY + 10}px`;
+                        
                         document.addEventListener('click', function closeTooltip(evt) {
                             if (evt.target !== element) {
                                 tooltip.style.display = 'none';
                                 document.removeEventListener('click', closeTooltip);
                             }
                         });
+                        
                         e.stopPropagation();
                     });
+                    
                     element.addEventListener('mouseenter', function(e) {
                         tooltip.innerHTML = `<div class="comment">${comment}</div>`;
                         tooltip.style.display = 'block';
                         tooltip.style.left = `${e.pageX + 10}px`;
                         tooltip.style.top = `${e.pageY + 10}px`;
                     });
+                    
                     element.addEventListener('mouseleave', function() {
                         tooltip.style.display = 'none';
                     });
