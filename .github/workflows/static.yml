@@ -32,7 +32,7 @@ jobs:
       - name: Move HTML file to root
         run: |
           mkdir -p docs
-          cp ias_computer/mmd_files/flowchart_instrucoes_artimeticas.html docs/index.html
+          cp mmd_files/flowchart_instrucoes_artimeticas.html docs/index.html
           # Copie outros assets se necessário (CSS, JS, imagens)
           # cp -r ias_computer/mmd_files/assets docs/
 
