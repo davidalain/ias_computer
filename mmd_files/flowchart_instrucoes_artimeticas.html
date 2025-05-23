@@ -180,17 +180,27 @@
         securityLevel: 'loose'
     });
 
-    // Mapeamento de comentários usando os textos dos nós como chave
+    // Mapeamento de comentários usando versões normalizadas dos textos como chave
     const comments = {
         "MBR ← M(MAR)": "O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR",
         "AC ← AC + MBR": "O conteúdo do MBR é adicionado ao AC, com o resultado sendo armazenado novamente no AC",
         "MBR(0) ← 0": "O bit mais significativo do MBR é setado como 0",
         "AC ← AC - MBR": "O conteúdo do MBR é subtraído do AC, com o resultado sendo armazenado novamente no AC",
-        "AC ← (MQ * MBR)(0:39)\nMQ ← (MQ * MBR)(40:79)": "O conteúdo do MQ é multiplicado com MBR, resultando em um número binário de 80 bits [0:79]. A parte mais significativa [0:39] é armazenada em AC. A parte menos significativa [40:79] é armazenada em MQ",
-        "MQ ← AC/MBR\nAC ← AC%MBR": "O conteúdo do AC é dividido por MBR. O quociente é armazenado em MQ e o resto é armazenado em AC",
+        "AC ← (MQ * MBR)(0:39) MQ ← (MQ * MBR)(40:79)": "O conteúdo do MQ é multiplicado com MBR, resultando em um número binário de 80 bits [0:79]. A parte mais significativa [0:39] é armazenada em AC. A parte menos significativa [40:79] é armazenada em MQ",
+        "MQ ← AC/MBR AC ← AC%MBR": "O conteúdo do AC é dividido por MBR. O quociente é armazenado em MQ e o resto é armazenado em AC",
         "AC ← AC << 1": "O conteúdo de AC é deslocado 1 bit para a esquerda e armazenado em AC",
-        "AC ← AC >> 1": "O conteúdo de AC é deslocado 1 bit para a direita e armazenado em AC"
+        "AC ← AC >> 1": "O conteúdo de AC é deslocado 1 bit para a direita e armazenado em AC",
+        "Left instruction required?": "Verifica se a instrução à esquerda no MBR é necessária",
+        "IR ← IBR(0:7) MAR ← IBR(8:19)": "O registrador de instrução (IR) recebe os bits 0-7 do IBR e o registrador de endereço de memória (MAR) recebe os bits 8-19",
+        "PC ← PC + 1 IBR ← 0": "O contador de programa é incrementado e o registrador de buffer de instrução é zerado"
     };
+
+    // Função para normalizar o texto (remove múltiplos espaços e trata quebras de linha)
+    function normalizeText(text) {
+        return text.replace(/\n/g, ' ')  // Substitui quebras de linha por espaço
+                   .replace(/\s+/g, ' ') // Substitui múltiplos espaços por um único
+                   .trim();              // Remove espaços no início/fim
+    }
 
     // Configura tooltips após o carregamento do Mermaid
     document.addEventListener('DOMContentLoaded', function() {
@@ -200,8 +210,8 @@
             
             // Adiciona eventos a todos os elementos com a classe 'clickable'
             document.querySelectorAll('.clickable').forEach(element => {
-                // Pega o texto do nó (que é a chave no nosso objeto comments)
-                const nodeText = element.textContent.trim();
+                // Pega e normaliza o texto do nó
+                const nodeText = normalizeText(element.textContent);
                 const comment = comments[nodeText];
                 
                 if (comment) {
@@ -219,10 +229,10 @@
                             }
                         });
                         
-                        e.stopPropagation(); // Evita que o evento se propague
+                        e.stopPropagation();
                     });
                     
-                    // Melhoria: tooltip no hover também
+                    // Tooltip no hover
                     element.addEventListener('mouseenter', function(e) {
                         tooltip.innerHTML = `<div class="comment">${comment}</div>`;
                         tooltip.style.display = 'block';
@@ -233,6 +243,8 @@
                     element.addEventListener('mouseleave', function() {
                         tooltip.style.display = 'none';
                     });
+                } else {
+                    console.log("Texto não encontrado:", nodeText); // Para depuração
                 }
             });
         }, 1000);
