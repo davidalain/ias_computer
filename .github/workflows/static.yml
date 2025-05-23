@@ -69,7 +69,7 @@ jobs:
           <body>
               <h1>IAS Computer - Diagramas de Fluxo</h1>
               <ul>
-                  <li><a href="flowchart_instrucoes_aritmeticas.html">Instruções Aritméticas</a></li>
+                  <li><a href="flowchart_instrucoes_artimeticas.html">Instruções Aritméticas</a></li>
                   <li><a href="flowchart_instrucoes_desvios_e_modificacao_endereco.html">Desvios e Modificação de Endereço</a></li>
                   <li><a href="flowchart_instrucoes_transferencia_de_dados.html">Transferência de Dados</a></li>
               </ul>
