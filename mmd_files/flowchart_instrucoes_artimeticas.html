@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Fluxograma do funcionamento do Computador IAS</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #tooltip {
+            position: absolute;
+            padding: 10px;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            display: none;
+            max-width: 300px;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .mermaid {
+            margin: 20px auto;
+        }
+        .comment {
+            color: #666;
+            font-style: italic;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fluxograma do funcionamento do Computador IAS</h1>
+    <div id="tooltip"></div>
+    <div class="mermaid">
+        flowchart TB
+
+        subgraph _fetch_cycle_ [Fetch Cycle]
+            START((Start)):::greenClass --> B{"Is next
+            instruction 
+            in IBR?"}
+            B --> |"Yes\n\nNo memory access\nrequired"| F("IR ← IBR(0:7)\nMAR ← IBR(8:19)")
+            F --> I
+            B --> |No| C("MAR ← PC")
+            C --> D("MBR ← M(MAR)")
+            D --> E{"Left\ninstruction\nrequired?"}
+            E --> |No| H("IR ← MBR(20:27)\nMAR ← MBR(28:39)")
+            E --> |Yes| G("IBR ← MBR(20:39)\nIR ← MBR(0:7)\nMAR ← MBR(8:19)")
+            H --> I("PC ← PC + 1\nIBR ← 0")
+        end
+
+        subgraph _decode_ [ ]
+            I --> DECODE
+            G --> DECODE
+            DECODE{{"Decode instruction in IR"}}:::orangeClass
+
+            style _decode_ fill:transparent,stroke:transparent
+
+            direction TB
+        end
+
+        subgraph _execution_cycle_ [Execution Cycle]
+            DECODE --> |"ADD M(X)\nOpcode: 00000101"| ADD_MX
+            subgraph ADD_MX ["ADD M(X)"]
+                %% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
+                ADD_MX__A("MBR ← M(MAR)"):::clickable
+                %% O conteúdo do MBR é adicionado ao AC, com o resultado sendo armazenado novamente no AC %%
+                ADD_MX__B("AC ← AC + MBR"):::clickable
+
+                ADD_MX__A ---> ADD_MX__B
+                direction TB
+            end
+
+            DECODE ---> |"ADD |M(X)|\nOpcode: 00000111"|ADD_MX2
+            subgraph ADD_MX2 ["ADD |M(X)|"]
+                %% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
+                ADD_MX2__A("MBR ← M(MAR)"):::clickable
+                %% O bit mais significativo do MBR é setado como 0
+                ADD_MX2__B("MBR(0) ← 0"):::clickable
+                %% O conteúdo do MBR é adicionado ao AC, com o resultado sendo armazenado novamente no AC %%
+                ADD_MX2__C("AC ← AC + MBR"):::clickable
+
+                ADD_MX2__A --> ADD_MX2__B
+                ADD_MX2__B --> ADD_MX2__C
+                direction TB        
+            end
+
+            DECODE --> |"SUB M(X)\nOpcode: 00000110"|SUB_MX
+            subgraph SUB_MX ["SUB M(X)"]
+                %% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
+                SUB_MX__A("MBR ← M(MAR)"):::clickable
+                %% O conteúdo do MBR é subtraido do AC, com o resultado sendo armazenado novamente no AC %%
+                SUB_MX__B("AC ← AC - MBR"):::clickable
+
+                SUB_MX__A ---> SUB_MX__B
+                direction TB
+            end
+
+            DECODE --> |"SUB |M(X)|\nOpcode: 00001000"|SUB_MX2
+            subgraph SUB_MX2 ["SUB |M(X)|"]
+                %% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
+                SUB_MX2__A("MBR ← M(MAR)"):::clickable
+                %% O bit mais significativo do MBR é setado como 0
+                SUB_MX2__B("MBR(0) ← 0"):::clickable
+                %% O conteúdo do MBR é subtraido do AC, com o resultado sendo armazenado novamente no AC %%
+                SUB_MX2__C("AC ← AC - MBR"):::clickable
+
+                SUB_MX2__A --> SUB_MX2__B
+                SUB_MX2__B --> SUB_MX2__C
+                direction TB
+            end
+
+            DECODE --> |"MUL M(X)\nOpcode: 00001011"|MUL_MX
+            subgraph MUL_MX ["MUL M(X)"]
+                %% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
+                MUL_MX_A("MBR ← M(MAR)"):::clickable
+                %% O conteúdo do MQ é multiplicado com MBR, resultando em um número binario de 80 bits [0:79]%%
+                %% A parte mais significativa [0:39] é armazenada em AC%%
+                %% A parte menos significativa [40:79] é armazenada em MQ%%
+                MUL_MX_B("AC ← (MQ * MBR)(0:39)\nMQ ← (MQ * MBR)(40:79)"):::clickable
+                MUL_MX_A ---> MUL_MX_B
+                direction TB
+            end
+
+            DECODE ---> |"DIV M(X)\nOpcode: 00001100"|DIV_MX
+            subgraph DIV_MX ["DIV M(X)"]
+                %% O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR %%
+                DIV_MX_A("MBR ← M(MAR)"):::clickable
+                %% O conteúdo do MQ é dividido com MBR%%
+                %% O quociente é armazendo em MQ%%
+                %% O resto é armazenado em AC%%
+                DIV_MX_B("MQ ← AC/MBR\nAC ← AC%MBR"):::clickable
+
+                DIV_MX_A ---> DIV_MX_B
+                direction TB
+            end
+
+            DECODE --> |"LSH\nOpcode: 00010100"|LSH_A
+            subgraph LSH_A ["LSH"]
+                %% O conteúdo de AC é deslocado 1 bit para a esquerda e armazenado em AC%%
+                LSH("AC ← AC << 1"):::clickable
+            end
+
+            DECODE --> |"RSH\nOpcode: 00010101"|RSH_A
+            subgraph RSH_A ["RSH"]
+                %% O conteúdo de AC é deslocado 1 bit para a direita e armazenado em AC%%
+                RSH("AC ← AC >> 1"):::clickable
+            end
+        end
+
+        subgraph _end_ [End]
+            style _end_ fill:transparent,stroke:transparent
+
+            END(("Go back\nto Start")):::greenClass
+
+            ADD_MX --- END
+            ADD_MX2 --- END
+            SUB_MX --- END
+            SUB_MX2 --- END
+            MUL_MX --- END
+            DIV_MX --- END
+            LSH_A --- END
+            RSH_A --- END
+            
+            direction TB
+        end
+
+        classDef greenClass fill:#008000
+        classDef orangeClass fill:#FF6347
+        classDef redFontClass color:#FF0000
+        classDef clickable cursor:pointer,stroke:#3366ff,stroke-width:2px
+    </div>
+
+    <script>
+        // Inicializa Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose'
+        });
+
+        // Mapeamento de comentários para cada elemento
+        const comments = {
+            "ADD_MX__A": "O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR",
+            "ADD_MX__B": "O conteúdo do MBR é adicionado ao AC, com o resultado sendo armazenado novamente no AC",
+            "ADD_MX2__A": "O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR",
+            "ADD_MX2__B": "O bit mais significativo do MBR é setado como 0",
+            "ADD_MX2__C": "O conteúdo do MBR é adicionado ao AC, com o resultado sendo armazenado novamente no AC",
+            "SUB_MX__A": "O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR",
+            "SUB_MX__B": "O conteúdo do MBR é subtraído do AC, com o resultado sendo armazenado novamente no AC",
+            "SUB_MX2__A": "O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR",
+            "SUB_MX2__B": "O bit mais significativo do MBR é setado como 0",
+            "SUB_MX2__C": "O conteúdo do MBR é subtraído do AC, com o resultado sendo armazenado novamente no AC",
+            "MUL_MX_A": "O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR",
+            "MUL_MX_B": "O conteúdo do MQ é multiplicado com MBR, resultando em um número binário de 80 bits [0:79]. A parte mais significativa [0:39] é armazenada em AC. A parte menos significativa [40:79] é armazenada em MQ",
+            "DIV_MX_A": "O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR",
+            "DIV_MX_B": "O conteúdo do AC é dividido por MBR. O quociente é armazenado em MQ e o resto é armazenado em AC",
+            "LSH": "O conteúdo de AC é deslocado 1 bit para a esquerda e armazenado em AC",
+            "RSH": "O conteúdo de AC é deslocado 1 bit para a direita e armazenado em AC"
+        };
+
+        // Configura tooltips após o carregamento do Mermaid
+        document.addEventListener('DOMContentLoaded', function() {
+            // Aguarda a renderização do Mermaid
+            setTimeout(function() {
+                const tooltip = document.getElementById('tooltip');
+                
+                // Adiciona eventos de clique a todos os elementos com a classe 'clickable'
+                document.querySelectorAll('.clickable').forEach(element => {
+                    const nodeId = element.getAttribute('data-node-id');
+                    
+                    element.addEventListener('click', function(e) {
+                        const comment = comments[nodeId];
+                        if (comment) {
+                            tooltip.innerHTML = `<div class="comment">${comment}</div>`;
+                            tooltip.style.display = 'block';
+                            tooltip.style.left = `${e.pageX + 10}px`;
+                            tooltip.style.top = `${e.pageY + 10}px`;
+                            
+                            // Fecha o tooltip ao clicar em qualquer lugar
+                            document.addEventListener('click', function closeTooltip(evt) {
+                                if (evt.target !== element) {
+                                    tooltip.style.display = 'none';
+                                    document.removeEventListener('click', closeTooltip);
+                                }
+                            });
+                        }
+                    });
+                });
+            }, 1000); // Tempo para garantir que o Mermaid foi renderizado
+        });
+    </script>
+</body>
+</html>
