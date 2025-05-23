@@ -24,17 +24,54 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python (for path handling)
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
-      - name: Move HTML file to root
+      - name: Prepare and deploy pages
         run: |
           mkdir -p public
-          cp mmd_files/flowchart_instrucoes_artimeticas.html public/index.html
-          # Copie outros assets se necessário (CSS, JS, imagens)
-          # cp -r ias_computer/mmd_files/assets public/
+          
+          # Copia todas as páginas HTML
+          cp mmd_files/flowchart_instrucoes_aritmeticas.html public/
+          cp mmd_files/flowchart_instrucoes_desvios_e_modificacao_endereco.html public/
+          cp mmd_files/flowchart_instrucoes_transferencia_de_dados.html public/
+          
+          # Cria um index.html com menu de navegação
+          echo '<!DOCTYPE html>
+          <html lang="pt-BR">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>IAS Computer - Diagramas de Fluxo</title>
+              <style>
+                  body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; }
+                  h1 { color: #2c3e50; text-align: center; }
+                  ul { list-style-type: none; padding: 0; }
+                  li { margin: 15px 0; }
+                  a { 
+                      display: block;
+                      padding: 10px 15px;
+                      background-color: #3498db;
+                      color: white;
+                      text-decoration: none;
+                      border-radius: 5px;
+                      text-align: center;
+                      transition: background-color 0.3s;
+                  }
+                  a:hover { background-color: #2980b9; }
+              </style>
+          </head>
+          <body>
+              <h1>IAS Computer - Diagramas de Fluxo</h1>
+              <ul>
+                  <li><a href="flowchart_instrucoes_aritmeticas.html">Instruções Aritméticas</a></li>
+                  <li><a href="flowchart_instrucoes_desvios_e_modificacao_endereco.html">Desvios e Modificação de Endereço</a></li>
+                  <li><a href="flowchart_instrucoes_transferencia_de_dados.html">Transferência de Dados</a></li>
+              </ul>
+          </body>
+          </html>' > public/index.html
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
