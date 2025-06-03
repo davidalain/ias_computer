@@ -172,7 +172,7 @@
             const tooltip = document.getElementById('tooltip');
             
             document.querySelectorAll('.clickable').forEach(element => {
-                const nodeText = element.textContent.trim();
+                const nodeText = element.innerHTML.trim();
                 const comment = comments[nodeText];
                 
                 if (comment) {
