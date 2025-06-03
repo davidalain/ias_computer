@@ -96,7 +96,7 @@
             DECODE --> |"MUL M(X) Opcode: 00001011"|MUL_MX
             subgraph MUL_MX ["MUL M(X)"]
                 MUL_MX_A("MBR ← M(MAR)"):::clickable
-                MUL_MX_B("AC ← (MQ * MBR)(0:39)\nMQ ← (MQ * MBR)(40:79)"):::clickable
+                MUL_MX_B("AC ← (MQ * MBR)(0:39)<br/>MQ ← (MQ * MBR)(40:79)"):::clickable
                 MUL_MX_A ---> MUL_MX_B
                 direction TB
             end
@@ -155,7 +155,7 @@
         "AC ← AC + MBR": "O conteúdo do MBR é adicionado ao AC, com o resultado sendo armazenado novamente no AC",
         "MBR(0) ← 0": "O bit mais significativo do MBR é setado como 0",
         "AC ← AC - MBR": "O conteúdo do MBR é subtraído do AC, com o resultado sendo armazenado novamente no AC",
-        "AC ← (MQ * MBR)(0:39) MQ ← (MQ * MBR)(40:79)": "O conteúdo do MQ é multiplicado com MBR, resultando em um número binário de 80 bits [0:79]. A parte mais significativa [0:39] é armazenada em AC. A parte menos significativa [40:79] é armazenada em MQ",
+        "AC ← (MQ * MBR)(0:39)<br/>MQ ← (MQ * MBR)(40:79)": "O conteúdo do MQ é multiplicado com MBR, resultando em um número binário de 80 bits [0:79]. A parte mais significativa [0:39] é armazenada em AC. A parte menos significativa [40:79] é armazenada em MQ",
         "MQ ← AC/MBR AC ← AC%MBR": "O conteúdo do AC é dividido por MBR. O quociente é armazenado em MQ e o resto é armazenado em AC",
         "AC ← AC << 1": "O conteúdo de AC é deslocado 1 bit para a esquerda e armazenado em AC",
         "AC ← AC >> 1": "O conteúdo de AC é deslocado 1 bit para a direita e armazenado em AC",
