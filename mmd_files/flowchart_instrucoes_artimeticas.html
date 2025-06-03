@@ -96,7 +96,8 @@
             DECODE --> |"MUL M(X) Opcode: 00001011"|MUL_MX
             subgraph MUL_MX ["MUL M(X)"]
                 MUL_MX_A("MBR ← M(MAR)"):::clickable
-                MUL_MX_B("AC ← (MQ * MBR)(0:39) MQ ← (MQ * MBR)(40:79)"):::clickable
+                MUL_MX_B("AC ← (MQ * MBR)(0:39):::clickable
+                MQ ← (MQ * MBR)(40:79)"):::clickable
                 MUL_MX_A ---> MUL_MX_B
                 direction TB
             end
@@ -104,7 +105,8 @@
             DECODE ---> |"DIV M(X) Opcode: 00001100"|DIV_MX
             subgraph DIV_MX ["DIV M(X)"]
                 DIV_MX_A("MBR ← M(MAR)"):::clickable
-                DIV_MX_B("MQ ← AC/MBR AC ← AC%MBR"):::clickable
+                DIV_MX_B("MQ ← AC/MBR 
+                AC ← AC%MBR"):::clickable
                 DIV_MX_A ---> DIV_MX_B
                 direction TB
             end
