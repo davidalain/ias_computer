@@ -38,13 +38,17 @@
 
         subgraph _fetch_cycle_ [Fetch Cycle]
             START((Start)):::greenClass --> B{"Is next instruction in IBR?"}
-            B --> |"Yes No memory access required"| F("IR ← IBR(0:7) MAR ← IBR(8:19)")
+            B --> |"Yes No memory access required"| F("IR ← IBR(0:7) 
+                                                       MAR ← IBR(8:19)")
             F --> I
             B --> |No| C("MAR ← PC")
             C --> D("MBR ← M(MAR)")
             D --> E{"Left instruction required?"}
-            E --> |No| H("IR ← MBR(20:27) MAR ← MBR(28:39)")
-            E --> |Yes| G("IBR ← MBR(20:39) IR ← MBR(0:7) MAR ← MBR(8:19)")
+            E --> |No| H("IR ← MBR(20:27) 
+                         MAR ← MBR(28:39)")
+            E --> |Yes| G("IBR ← MBR(20:39) 
+                           IR ← MBR(0:7) 
+                           MAR ← MBR(8:19)")
             H --> I("PC ← PC + 1 IBR ← 0")
         end
 
