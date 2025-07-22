@@ -42,3 +42,20 @@
 ### Correções também foram apontadas por:
 - [Rafael Rocha](https://github.com/NKRaff)
 - [Daniel Ferreira](https://github.com/ThePocketRocket)
+
+  Aqui está a seção adicional para o README.md explicando a pipeline e a interatividade dos diagramas:
+
+
+## Implementação Interativa e Deploy Automatizado
+
+**Por [Davi Ferreira Lima](https://github.com/daviferreiralima)**
+
+Acesse a versão interativa completa em:  
+[IAS Computer - Diagramas de Fluxo Interativos](https://davidalain.github.io/ias_computer/)
+
+Os arquivos HTML estão disponíveis em:
+- `mmd_files/flowchart_instrucoes_aritmeticas.html`
+- `mmd_files/flowchart_instrucoes_desvios_e_modificacao_endereco.html` 
+- `mmd_files/flowchart_instrucoes_transferencia_de_dados.html`
+- 
+```

@@ -1,0 +1,89 @@
+name: Deploy IAS Computer Flowchart to GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Prepare and deploy pages
+        run: |
+          # Verifica a estrutura do diretório (para debug)
+          ls -R
+          
+          mkdir -p public
+          
+          # Copia todas as páginas HTML (caminhos corrigidos)
+          cp ./mmd_files/flowchart_instrucoes_artimeticas.html public/
+          cp ./mmd_files/flowchart_instrucoes_desvios_e_modificacao_endereco.html public/
+          cp ./mmd_files/flowchart_instrucoes_transferencia_de_dados.html public/
+          
+          # Cria um index.html com menu de navegação
+          echo '<!DOCTYPE html>
+          <html lang="pt-BR">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>IAS Computer - Diagramas de Fluxo</title>
+              <style>
+                  body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; }
+                  h1 { color: #2c3e50; text-align: center; }
+                  ul { list-style-type: none; padding: 0; }
+                  li { margin: 15px 0; }
+                  a { 
+                      display: block;
+                      padding: 10px 15px;
+                      background-color: #3498db;
+                      color: white;
+                      text-decoration: none;
+                      border-radius: 5px;
+                      text-align: center;
+                      transition: background-color 0.3s;
+                  }
+                  a:hover { background-color: #2980b9; }
+              </style>
+          </head>
+          <body>
+              <h1>IAS Computer - Diagramas de Fluxo</h1>
+              <ul>
+                  <li><a href="flowchart_instrucoes_artimeticas.html">Instruções Aritméticas</a></li>
+                  <li><a href="flowchart_instrucoes_desvios_e_modificacao_endereco.html">Desvios e Modificação de Endereço</a></li>
+                  <li><a href="flowchart_instrucoes_transferencia_de_dados.html">Transferência de Dados</a></li>
+              </ul>
+          </body>
+          </html>' > public/index.html
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'public'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

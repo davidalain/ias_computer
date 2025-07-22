@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Fluxograma do funcionamento do Computador IAS - Instruções de modificação de Endereço</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #tooltip {
+            position: absolute;
+            padding: 10px;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            display: none;
+            max-width: 300px;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .mermaid {
+            margin: 20px auto;
+        }
+        .comment {
+            color: #666;
+            font-style: italic;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fluxograma do funcionamento do Computador IAS - Instruções de Endereço</h1>
+    <div id="tooltip"></div>
+    <div class="mermaid">
+        flowchart TB
+
+        subgraph _fetch_cycle_ [Fetch Cycle]
+            START((Start)):::greenClass --> B{"Is next instruction in IBR?"}
+            B --> |"Yes No memory access required"| F("IR ← IBR(0:7) 
+                                                       MAR ← IBR(8:19)")
+            F --> I
+            B --> |No| C("MAR ← PC")
+            C --> D("MBR ← M(MAR)")
+            D --> E{"Left instruction required?"}
+            E --> |No| H("IR ← MBR(20:27) 
+                         MAR ← MBR(28:39)")
+            E --> |Yes| G("IBR ← MBR(20:39) 
+                           IR ← MBR(0:7) 
+                           MAR ← MBR(8:19)")
+            H --> I("PC ← PC + 1 IBR ← 0")
+        end
+
+        subgraph _decode_ [ ]
+            I --> DECODE
+            G --> DECODE
+            DECODE{{"Decode instruction in IR"}}:::orangeClass
+            style _decode_ fill:transparent,stroke:transparent
+            direction TB
+        end
+
+        subgraph _execution_cycle_ [Execution Cycle]
+            DECODE --> |"STOR M(X, 8:19) Opcode: 00010010"| STOR_MXL
+            subgraph STOR_MXL ["STOR M(X, 8:19)"]
+                STOR_MXL1("MBR ← M(MAR)"):::clickable
+                STOR_MXL2("MBR(8:19) ← AC(28:39)"):::clickable
+                STOR_MXL3("M(MAR) ← MBR"):::clickable
+                STOR_MXL1 --> STOR_MXL2 --> STOR_MXL3
+                direction TB
+            end
+
+            DECODE --> |"STOR M(X, 28:39) Opcode: 00010011"| STOR_MXR
+            subgraph STOR_MXR ["STOR M(X, 28:39)"]
+                STOR_MXR1("MBR ← M(MAR)"):::clickable
+                STOR_MXR2("MBR(28:39) ← AC(28:39)"):::clickable
+                STOR_MXR3("M(MAR) ← MBR"):::clickable
+                STOR_MXR1 --> STOR_MXR2 --> STOR_MXR3
+                direction TB
+            end
+
+            DECODE --> |"JUMP M(X, 0:19) Opcode: 00001101"| JUMP_ML
+            subgraph JUMP_ML ["JUMP M(X, 0:19)"]
+                JUMP_MXL1("PC ← MAR IBR ← 0"):::clickable
+                JUMP_MXL2("Left instruction required: YES"):::clickable
+                JUMP_MXL1 --> JUMP_MXL2
+                direction TB
+            end
+
+            DECODE --> |"JUMP M(X, 20:39) Opcode: 00001110"| JUMP_MR
+            subgraph JUMP_MR ["JUMP M(X, 20:39)"]
+                JUMP_MXR1("PC ← MAR IBR ← 0"):::clickable
+                JUMP_MXR2("Left instruction required: NO"):::clickable
+                JUMP_MXR1 --> JUMP_MXR2
+                direction TB
+            end
+
+            DECODE --> |"JUMP+ M(X, 0:19) Opcode: 00001111"| JUMP+_ML
+            subgraph JUMP+_ML ["JUMP+ M(X, 0:19)"]
+                JUMP1_MXL1{"AC >= 0"}:::clickable
+                JUMP1_MXL2("PC ← MAR IBR ← 0"):::clickable
+                JUMP1_MXL3("Left instruction required: YES"):::clickable
+                DO_NOTHING_L("Do nothing"):::clickable
+                JUMP1_MXL1 --> |Yes| JUMP1_MXL2 --> JUMP1_MXL3
+                JUMP1_MXL1 --> |No| DO_NOTHING_L
+                direction TB
+            end
+
+            DECODE --> |"JUMP+ M(X, 20:39) Opcode: 00010000"| JUMP+_MR
+            subgraph JUMP+_MR ["JUMP+ M(X, 20:39)"]
+                JUMP1_MXR1{"AC >= 0"}:::clickable
+                JUMP1_MXR2("PC ← MAR IBR ← 0"):::clickable
+                JUMP1_MXR3("Left instruction required: NO"):::clickable
+                DO_NOTHING_R("Do nothing"):::clickable
+                JUMP1_MXR1 --> |Yes| JUMP1_MXR2 --> JUMP1_MXR3
+                JUMP1_MXR1 --> |No| DO_NOTHING_R
+                direction TB
+            end
+        end
+
+        subgraph _end_ [End]
+            style _end_ fill:transparent,stroke:transparent
+            END(("Go back to Start")):::greenClass
+            STOR_MXL --- END
+            STOR_MXR --- END
+            JUMP_ML --- END
+            JUMP_MR --- END
+            JUMP+_ML --- END
+            JUMP+_MR --- END
+            direction TB
+        end
+
+        classDef greenClass fill:#008000
+        classDef orangeClass fill:#FF6347
+        classDef redFontClass color:#FF0000
+        classDef clickable cursor:pointer,stroke:#3366ff,stroke-width:2px
+    </div>
+
+    <script>
+    // Inicializa Mermaid
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'default',
+        securityLevel: 'loose'
+    });
+
+    // Mapeamento de comentários
+    const comments = {
+        "MBR ← M(MAR)": "O conteúdo da memória no endereço indicado pelo MAR é lido e armazenado no MBR",
+        "MBR(8:19) ← AC(28:39)": "Os bits 8-19 do MBR são substituídos pelos bits 28-39 do AC",
+        "M(MAR) ← MBR": "O conteúdo do MBR é escrito na memória no endereço indicado pelo MAR",
+        "MBR(28:39) ← AC(28:39)": "Os bits 28-39 do MBR são substituídos pelos bits 28-39 do AC",
+        "PC ← MAR IBR ← 0": "O contador de programa recebe o valor do MAR e o IBR é zerado",
+        "Left instruction required: YES": "Indica que a próxima instrução a ser executada está na parte esquerda da palavra de memória",
+        "Left instruction required: NO": "Indica que a próxima instrução a ser executada está na parte direita da palavra de memória",
+        "AC >= 0": "Verifica se o valor no acumulador (AC) é não negativo (maior ou igual a zero)",
+        "Do nothing": "Não realiza nenhuma operação, continua o fluxo normal de execução",
+        "Is next instruction in IBR?": "Verifica se a próxima instrução está disponível no Instruction Buffer Register (IBR)",
+        "Yes No memory access required": "Quando a instrução está no IBR, não é necessário acessar a memória principal",
+        "Left instruction required?": "Verifica se a instrução à esquerda no MBR é necessária",
+        "IR ← IBR(0:7) MAR ← IBR(8:19)": "O registrador de instrução (IR) recebe os bits 0-7 do IBR e o registrador de endereço de memória (MAR) recebe os bits 8-19",
+        "PC ← PC + 1 IBR ← 0": "O contador de programa é incrementado e o registrador de buffer de instrução é zerado"
+    };
+
+    // Configura tooltips
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+            const tooltip = document.getElementById('tooltip');
+            
+            document.querySelectorAll('.clickable').forEach(element => {
+                const nodeText = element.textContent.trim();
+                const comment = comments[nodeText];
+                
+                if (comment) {
+                    element.addEventListener('click', function(e) {
+                        tooltip.innerHTML = `<div class="comment">${comment}</div>`;
+                        tooltip.style.display = 'block';
+                        tooltip.style.left = `${e.pageX + 10}px`;
+                        tooltip.style.top = `${e.pageY + 10}px`;
+                        
+                        document.addEventListener('click', function closeTooltip(evt) {
+                            if (evt.target !== element) {
+                                tooltip.style.display = 'none';
+                                document.removeEventListener('click', closeTooltip);
+                            }
+                        });
+                        
+                        e.stopPropagation();
+                    });
+                    
+                    element.addEventListener('mouseenter', function(e) {
+                        tooltip.innerHTML = `<div class="comment">${comment}</div>`;
+                        tooltip.style.display = 'block';
+                        tooltip.style.left = `${e.pageX + 10}px`;
+                        tooltip.style.top = `${e.pageY + 10}px`;
+                    });
+                    
+                    element.addEventListener('mouseleave', function() {
+                        tooltip.style.display = 'none';
+                    });
+                }
+            });
+        }, 1000);
+    });
+    </script>
+</body>
+</html>
