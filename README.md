@@ -47,13 +47,8 @@
 
 
 ## Implementação Interativa e Deploy Automatizado
-
 - Por [Davi Ferreira Lima](https://github.com/daviferreiralima)
 
 ## Acesse a versão interativa completa em:  
 [IAS Computer - Diagramas de Fluxo Interativos](https://davidalain.github.io/ias_computer/)
 
-Os arquivos HTML estão disponíveis em:
-- `mmd_files/flowchart_instrucoes_aritmeticas.html`
-- `mmd_files/flowchart_instrucoes_desvios_e_modificacao_endereco.html` 
-- `mmd_files/flowchart_instrucoes_transferencia_de_dados.html`
